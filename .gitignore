@@ -1,0 +1,12 @@
+**/.idea
+**.iml
+**/target
+
+# Maven
+**/log/
+**/target/
+
+#Gradle
+**/build/
+**/gradle/
+**/.gradle/
