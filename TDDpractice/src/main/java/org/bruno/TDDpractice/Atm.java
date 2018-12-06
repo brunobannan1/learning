@@ -15,8 +15,8 @@ public class Atm {
         this.size1000 = size1000;
         this.size5000 = size5000;
         this.cache = size100 * 100 +
-                     size1000 * 1000 +
-                     size5000 * 5000;
+                size1000 * 1000 +
+                size5000 * 5000;
     }
 
     public ArrayList<Card> getCards() {
@@ -85,19 +85,43 @@ public class Atm {
     }
 
     private boolean canWithdraw(long cache) {
+        int i100 = this.getSize100();
+        int i1000 = this.getSize1000();
+        int i5000 = this.getSize5000();
         if (cache == 0) return false;
-        long minus5000 = cache / 5000;
-        long left = cache % 5000;
-        long minus1000 = left / 1000;
-        left = left % 1000;
-        long minus100 = left / 100;
-        left = left % 100;
-        if (left == 0) {
-            this.setSize100(this.getSize100() - (int) minus100);
-            this.setSize1000(this.getSize1000() - (int) minus1000);
-            this.setSize5000(this.getSize5000() - (int) minus5000);
-            this.setCache(this.getCache() - cache);
-            return true;
+        long left = cache;
+        long minus5000 = 0;
+        long minus1000 = 0;
+        if(i5000 > 0) {
+            minus5000 = cache / 5000;
+            if(minus5000 > i5000) {
+                int dif = (int) (minus5000 - i5000);
+                left = (cache % 5000) + dif * 5_000;
+                minus5000 = minus5000 - dif;
+            } else {
+                left = cache % 5000;
+            }
+        }
+        if (i1000 > 0) {
+            minus1000 = left / 1000;
+            if(minus1000 > i1000) {
+                int dif = (int) (minus1000 - i1000);
+                left = (left % 1000) + dif * 1_000;
+                minus1000 = minus1000 - dif;
+            } else {
+                left = left % 1000;
+            }
+        }
+        if (i100 > 0) {
+            long minus100 = left / 100;
+            left = left % 100;
+            if (left == 0) {
+                this.setSize100(this.getSize100() - (int) minus100);
+                this.setSize1000(this.getSize1000() - (int) minus1000);
+                this.setSize5000(this.getSize5000() - (int) minus5000);
+                this.setCache(this.getCache() - cache);
+                return true;
+            }
         }
         return false;
     }

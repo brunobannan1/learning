@@ -9,18 +9,19 @@ import java.util.Arrays;
 import java.util.concurrent.CancellationException;
 
 public class TestAtm {
-    Atm atm;
+    Atm atm,atm2;
     Card card1;
     Card card2;
     Card card3;
 
     @Before
     public void initialize() {
-        this.card1 = new Card("Vasya", 1111_1111_1111_1111L, 100);
+        this.card1 = new Card("Vasya", 1111_1111_1111_1111L, 600_000);
         this.card2 = new Card("Petya", 2222_2222_2222_2222L, 10001);
         this.card3 = new Card("Mongol", 3333_3333_3333_3333L, 100_000);
         // 700_000 RUB
         this.atm = new Atm(new ArrayList<>(Arrays.asList(card1,card2,card3)), 1000, 100, 100);
+        this.atm2 = new Atm(new ArrayList<>(Arrays.asList(card1,card2,card3)), 1000, 1, 1);
     }
 
     @Test
@@ -71,7 +72,7 @@ public class TestAtm {
         Assert.assertTrue(card2.getCache() == before2 - 10_000);
         Assert.assertTrue(atm.getSize5000() == atmSize5000 - 2);
 
-        atm.withdraw(card1.getCardNumber(), 100);
+        atm.withdraw(card1.getCardNumber(), 10_000_000);
     }
 
     @Test
@@ -86,6 +87,36 @@ public class TestAtm {
         Assert.assertTrue(atm.getSize5000() == atmSize5000 - 14);
         Assert.assertTrue(atm.getSize1000() == atmSize1000 - 3);
         Assert.assertTrue(atm.getSize100() == atmSize100 - 4);
+    }
+
+    @Test
+    public void card1Withdraw() throws CancellationException, IllegalAccessException {
+        int atmSize100 = atm.getSize100();
+        int atmSize1000 = atm.getSize1000();
+        int atmSize5000 = atm.getSize5000();
+        long before = card1.getCache();
+        long atmBefore = atm.getCache();
+        atm.withdraw(card1.getCardNumber(), 506_000);
+        Assert.assertTrue(atm.getCache() == atmBefore - 506_000);
+        Assert.assertTrue(atm.getSize5000() == atmSize5000 - 100);
+        Assert.assertTrue(atm.getSize1000() == atmSize1000 - 6);
+        Assert.assertTrue(atm.getSize100() == atmSize100);
+        Assert.assertTrue(card1.getCache() == before - 506_000);
+    }
+
+    @Test
+    public void atm2test() throws CancellationException, IllegalAccessException {
+        int atmSize100 = atm2.getSize100();
+        int atmSize1000 = atm2.getSize1000();
+        int atmSize5000 = atm2.getSize5000();
+        long before = card3.getCache();
+        long atmBefore = atm2.getCache();
+        atm2.withdraw(card3.getCardNumber(), 100_000);
+        Assert.assertTrue(atm2.getCache() == atmBefore - 100_000);
+        Assert.assertTrue(atm2.getSize5000() == atmSize5000 - 1);
+        Assert.assertTrue(atm2.getSize1000() == atmSize1000 - 1);
+        Assert.assertTrue(atm2.getSize100() == atmSize100 - 940);
+        Assert.assertTrue(card3.getCache() == before - 100_000);
     }
 
     @Test
