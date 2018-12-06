@@ -45,10 +45,11 @@ public class TestAtm {
     @Test
     public void canDepositInDifferentNominal() throws IllegalAccessException {
         long beforeAtmCache = atm.getCache();
+        long cardCache = card1.getCache();
         atm.deposit(1111_1111_1111_1111L,1,1,1);
         long afterAtmCache = atm.getCache();
         Assert.assertTrue(beforeAtmCache + 6100L == afterAtmCache);
-        //Assert.assertTrue();
+        Assert.assertTrue(card1.getCache() == cardCache + 6100L);
     }
 
     @Test(expected = CancellationException.class)
