@@ -25,7 +25,7 @@ public class TestAtm {
     }
 
     @Test
-    public void atmCacheChangedAfterDeposit() throws IllegalAccessException {
+    public void atmCashChangedAfterDeposit() throws IllegalAccessException {
         int bef100 = atm.getSize100();
         int bef1000 = atm.getSize1000();
         int bef5000 = atm.getSize5000();
@@ -34,42 +34,42 @@ public class TestAtm {
         Assert.assertTrue(atm.getSize100() == bef100 + 100);
         Assert.assertTrue(atm.getSize1000() == bef1000 + 10);
         Assert.assertTrue(atm.getSize5000() == bef5000 + 1);
-        Assert.assertTrue(atm.getCache() == 725_000L);
+        Assert.assertTrue(atm.getCash() == 725_000L);
     }
 
     @Test
-    public void cardCacheChangedAfterDeposit() throws IllegalAccessException {
+    public void cardCashChangedAfterDeposit() throws IllegalAccessException {
         atm.deposit(2222_2222_2222_2222L,10,10,5);
-        Assert.assertTrue(card2.getCache() == 46_001L);
+        Assert.assertTrue(card2.getCash() == 46_001L);
     }
 
     @Test
     public void canDepositInDifferentNominal() throws IllegalAccessException {
-        long beforeAtmCache = atm.getCache();
-        long cardCache = card1.getCache();
+        long beforeAtmCash = atm.getCash();
+        long cardCash = card1.getCash();
         atm.deposit(1111_1111_1111_1111L,1,1,1);
-        long afterAtmCache = atm.getCache();
-        Assert.assertTrue(beforeAtmCache + 6100L == afterAtmCache);
-        Assert.assertTrue(card1.getCache() == cardCache + 6100L);
+        long afterAtmCash = atm.getCash();
+        Assert.assertTrue(beforeAtmCash + 6100L == afterAtmCash);
+        Assert.assertTrue(card1.getCash() == cardCash + 6100L);
     }
 
     @Test(expected = CancellationException.class)
-    public void canWithdrawCache() throws CancellationException, IllegalAccessException {
+    public void canWithdrawCash() throws CancellationException, IllegalAccessException {
         int atmSize100 = atm.getSize100();
         int atmSize5000 = atm.getSize5000();
-        long before = card1.getCache();
-        long before2 = card2.getCache();
+        long before = card1.getCash();
+        long before2 = card2.getCash();
 
         atm.withdraw(card1.getCardNumber(), 100);
-        Assert.assertTrue(card1.getCache() == before - 100);
+        Assert.assertTrue(card1.getCash() == before - 100);
         Assert.assertTrue(atm.getSize100() == atmSize100 - 1);
 
         atm.withdraw(card2.getCardNumber(), 5_000);
-        Assert.assertTrue(card2.getCache() == before2 - 5_000);
+        Assert.assertTrue(card2.getCash() == before2 - 5_000);
         Assert.assertTrue(atm.getSize5000() == atmSize5000 - 1);
 
         atm.withdraw(card2.getCardNumber(), 5_000);
-        Assert.assertTrue(card2.getCache() == before2 - 10_000);
+        Assert.assertTrue(card2.getCash() == before2 - 10_000);
         Assert.assertTrue(atm.getSize5000() == atmSize5000 - 2);
 
         atm.withdraw(card1.getCardNumber(), 10_000_000);
@@ -80,10 +80,10 @@ public class TestAtm {
         int atmSize100 = atm.getSize100();
         int atmSize1000 = atm.getSize1000();
         int atmSize5000 = atm.getSize5000();
-        long before = card3.getCache();
-        long atmBefore = atm.getCache();
+        long before = card3.getCash();
+        long atmBefore = atm.getCash();
         atm.withdraw(card3.getCardNumber(), 73_400);
-        Assert.assertTrue(atm.getCache() == atmBefore - 73_400);
+        Assert.assertTrue(atm.getCash() == atmBefore - 73_400);
         Assert.assertTrue(atm.getSize5000() == atmSize5000 - 14);
         Assert.assertTrue(atm.getSize1000() == atmSize1000 - 3);
         Assert.assertTrue(atm.getSize100() == atmSize100 - 4);
@@ -94,14 +94,14 @@ public class TestAtm {
         int atmSize100 = atm.getSize100();
         int atmSize1000 = atm.getSize1000();
         int atmSize5000 = atm.getSize5000();
-        long before = card1.getCache();
-        long atmBefore = atm.getCache();
+        long before = card1.getCash();
+        long atmBefore = atm.getCash();
         atm.withdraw(card1.getCardNumber(), 506_000);
-        Assert.assertTrue(atm.getCache() == atmBefore - 506_000);
+        Assert.assertTrue(atm.getCash() == atmBefore - 506_000);
         Assert.assertTrue(atm.getSize5000() == atmSize5000 - 100);
         Assert.assertTrue(atm.getSize1000() == atmSize1000 - 6);
         Assert.assertTrue(atm.getSize100() == atmSize100);
-        Assert.assertTrue(card1.getCache() == before - 506_000);
+        Assert.assertTrue(card1.getCash() == before - 506_000);
     }
 
     @Test
@@ -109,19 +109,19 @@ public class TestAtm {
         int atmSize100 = atm2.getSize100();
         int atmSize1000 = atm2.getSize1000();
         int atmSize5000 = atm2.getSize5000();
-        long before = card3.getCache();
-        long atmBefore = atm2.getCache();
+        long before = card3.getCash();
+        long atmBefore = atm2.getCash();
         atm2.withdraw(card3.getCardNumber(), 100_000);
-        Assert.assertTrue(atm2.getCache() == atmBefore - 100_000);
+        Assert.assertTrue(atm2.getCash() == atmBefore - 100_000);
         Assert.assertTrue(atm2.getSize5000() == atmSize5000 - 1);
         Assert.assertTrue(atm2.getSize1000() == atmSize1000 - 1);
         Assert.assertTrue(atm2.getSize100() == atmSize100 - 940);
-        Assert.assertTrue(card3.getCache() == before - 100_000);
+        Assert.assertTrue(card3.getCash() == before - 100_000);
     }
 
     @Test
-    public void canCheckCacheLeft() throws IllegalAccessException {
-        long left = atm.cacheLeft(card1.getCardNumber());
-        Assert.assertTrue(left == card1.getCache());
+    public void canCheckCashLeft() throws IllegalAccessException {
+        long left = atm.cashLeft(card1.getCardNumber());
+        Assert.assertTrue(left == card1.getCash());
     }
 }
