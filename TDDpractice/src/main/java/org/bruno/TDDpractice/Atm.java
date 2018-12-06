@@ -6,7 +6,7 @@ import java.util.concurrent.CancellationException;
 public class Atm {
 
     private ArrayList<Card> cards;
-    private long cache;
+    private long cash;
     private int size100, size1000, size5000;
 
     public Atm(ArrayList<Card> cards, int size100, int size1000, int size5000) {
@@ -14,7 +14,7 @@ public class Atm {
         this.size100 = size100;
         this.size1000 = size1000;
         this.size5000 = size5000;
-        this.cache = size100 * 100 +
+        this.cash = size100 * 100 +
                 size1000 * 1000 +
                 size5000 * 5000;
     }
@@ -27,12 +27,12 @@ public class Atm {
         this.cards = cards;
     }
 
-    public void setCache(long cache) {
-        this.cache = cache;
+    public void setCash(long cash) {
+        this.cash = cash;
     }
 
-    public long getCache() {
-        return cache;
+    public long getCash() {
+        return cash;
     }
 
     public int getSize100() {
@@ -65,41 +65,41 @@ public class Atm {
         this.size100 = this.size100 + rub100;
         this.size1000 = this.size1000 + rub1000;
         this.size5000 = this.size5000 + rub5000;
-        this.cache = this.cache + money;
-        card.setCache(card.getCache() + money);
+        this.cash = this.cash + money;
+        card.setCash(card.getCash() + money);
     }
 
-    public void withdraw(long cardNumber, long cache) throws IllegalAccessException, CancellationException {
+    public void withdraw(long cardNumber, long cash) throws IllegalAccessException, CancellationException {
         Card card = getCardByCardNumber(cardNumber);
-        if(this.getCache() < cache) throw new CancellationException("Sorry, ATM has no money.");
-        if(card.getCache() < cache) throw new CancellationException("Sorry, Insufficient funds. Cache left: " + card.getCache());
-        boolean can = canWithdraw(cache);
+        if(this.getCash() < cash) throw new CancellationException("Sorry, ATM has no money.");
+        if(card.getCash() < cash) throw new CancellationException("Sorry, Insufficient funds. Cash left: " + card.getCash());
+        boolean can = canWithdraw(cash);
         if (can) {
-            card.setCache(card.getCache() - cache);
-        } else throw new CancellationException("Sorry, ATM cant give this cache: " + cache);
+            card.setCash(card.getCash() - cash);
+        } else throw new CancellationException("Sorry, ATM cant give this cash: " + cash);
     }
 
-    public long cacheLeft(long cardNumber) throws IllegalAccessException {
+    public long cashLeft(long cardNumber) throws IllegalAccessException {
         Card card = getCardByCardNumber(cardNumber);
-        return card.getCache();
+        return card.getCash();
     }
 
-    private boolean canWithdraw(long cache) {
+    private boolean canWithdraw(long cash) {
         int i100 = this.getSize100();
         int i1000 = this.getSize1000();
         int i5000 = this.getSize5000();
-        if (cache == 0) return false;
-        long left = cache;
+        if (cash == 0) return false;
+        long left = cash;
         long minus5000 = 0;
         long minus1000 = 0;
         if(i5000 > 0) {
-            minus5000 = cache / 5000;
+            minus5000 = cash / 5000;
             if(minus5000 > i5000) {
                 int dif = (int) (minus5000 - i5000);
-                left = (cache % 5000) + dif * 5_000;
+                left = (cash % 5000) + dif * 5_000;
                 minus5000 = minus5000 - dif;
             } else {
-                left = cache % 5000;
+                left = cash % 5000;
             }
         }
         if (i1000 > 0) {
@@ -119,7 +119,7 @@ public class Atm {
                 this.setSize100(this.getSize100() - (int) minus100);
                 this.setSize1000(this.getSize1000() - (int) minus1000);
                 this.setSize5000(this.getSize5000() - (int) minus5000);
-                this.setCache(this.getCache() - cache);
+                this.setCash(this.getCash() - cash);
                 return true;
             }
         }

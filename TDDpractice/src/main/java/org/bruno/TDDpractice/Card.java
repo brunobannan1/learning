@@ -2,7 +2,7 @@ package org.bruno.TDDpractice;
 
 public class Card {
     private String cardholder;
-    private long cache;
+    private long cash;
     public long cardNumber;
 
 
@@ -22,18 +22,18 @@ public class Card {
         this.cardNumber = cardNumber;
     }
 
-    public long getCache() {
-        return cache;
+    public long getCash() {
+        return cash;
     }
 
-    public void setCache(long cache) {
-        this.cache = cache;
+    public void setCash(long cash) {
+        this.cash = cash;
     }
 
-    public Card(String cardholder, long cardNumber, long cache) {
+    public Card(String cardholder, long cardNumber, long cash) {
         this.cardholder = cardholder;
         this.cardNumber = cardNumber;
-        this.cache = cache;
+        this.cash = cash;
     }
 
 }
