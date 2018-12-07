@@ -39,6 +39,13 @@ public class AtmDepartment implements Iterable {
         return new AtmDepartmentIteratorImpl<>(this.listAtm);
     }
 
+    public void restoreAtmsState() {
+        Iterator<Atm> it = createIterator();
+        while (it.hasMore()) {
+            it.getNext().restoreFromSnapshot();
+        }
+    }
+
     public class AtmDepartmentIteratorImpl<T> implements Iterator<T> {
 
         private ArrayList<T> list;

@@ -8,6 +8,7 @@ public class Atm {
     private ArrayList<Card> cards;
     private long cash;
     private int size100, size1000, size5000;
+    private AtmSnapshot atmSnapshot;
 
     public Atm(ArrayList<Card> cards, int size100, int size1000, int size5000) {
         this.cards = cards;
@@ -17,6 +18,7 @@ public class Atm {
         this.cash = size100 * 100 +
                 size1000 * 1000 +
                 size5000 * 5000;
+        atmSnapshot = makeSnapshot();
     }
 
     public ArrayList<Card> getCards() {
@@ -84,6 +86,14 @@ public class Atm {
         return card.getCash();
     }
 
+    public AtmSnapshot makeSnapshot () {
+        return new AtmSnapshot(this, cards, cash, size100, size1000, size5000 );
+    }
+
+    public void restoreFromSnapshot () {
+        atmSnapshot.restore();
+    }
+
     private boolean canWithdraw(long cash) {
         int i100 = this.getSize100();
         int i1000 = this.getSize1000();
@@ -131,5 +141,29 @@ public class Atm {
             if (cardNumber == card.getCardNumber()) return card;
         }
         throw new IllegalAccessException();
+    }
+
+    public class AtmSnapshot {
+        private final Atm atm;
+        private final ArrayList<Card> cards;
+        private final long cash;
+        private final int size100, size1000, size5000;
+
+        public AtmSnapshot(Atm atm, ArrayList<Card> cards, long cash, int size100, int size1000, int size5000) {
+            this.atm = atm;
+            this.cards = cards;
+            this.cash = cash;
+            this.size100 = size100;
+            this.size1000 = size1000;
+            this.size5000 = size5000;
+        }
+
+        public void restore () {
+            atm.setSize100(size100);
+            atm.setSize1000(size1000);
+            atm.setSize5000(size5000);
+            atm.setCards(cards);
+            atm.setCash(cash);
+        }
     }
 }
