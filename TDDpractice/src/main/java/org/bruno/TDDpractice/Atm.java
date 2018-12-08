@@ -1,9 +1,11 @@
 package org.bruno.TDDpractice;
 
+import org.bruno.TDDpractice.interfaces.AtmListenerInterface;
+
 import java.util.ArrayList;
 import java.util.concurrent.CancellationException;
 
-public class Atm {
+public class Atm implements AtmListenerInterface {
 
     private ArrayList<Card> cards;
     private long cash;
@@ -19,6 +21,16 @@ public class Atm {
                 size1000 * 1000 +
                 size5000 * 5000;
         atmSnapshot = makeSnapshot();
+    }
+
+    @Override
+    public String toString() {
+        return "Atm{" +
+                "cash=" + cash +
+                ", size100=" + size100 +
+                ", size1000=" + size1000 +
+                ", size5000=" + size5000 +
+                '}';
     }
 
     public ArrayList<Card> getCards() {
@@ -141,6 +153,11 @@ public class Atm {
             if (cardNumber == card.getCardNumber()) return card;
         }
         throw new IllegalAccessException();
+    }
+
+    @Override
+    public void notificate() {
+        restoreFromSnapshot();
     }
 
     public class AtmSnapshot {
