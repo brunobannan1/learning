@@ -1,9 +1,11 @@
 package org.bruno.TDDpractice;
 
+import org.bruno.TDDpractice.interfaces.AtmListenerInterface;
 import org.bruno.TDDpractice.interfaces.Iterable;
 import org.bruno.TDDpractice.interfaces.Iterator;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AtmDepartment implements Iterable {
 
@@ -28,7 +30,7 @@ public class AtmDepartment implements Iterable {
     }
 
     public long acquireSum() {
-        Iterator<Atm> it = createIterator();
+        Iterator<Atm> it = createIterator(this.listAtm);
         long sum = 0;
         while(it.hasMore()) {
             sum = sum + it.getNext().getCash();
@@ -36,24 +38,24 @@ public class AtmDepartment implements Iterable {
         return sum;
     }
 
-    public void subscribe(Atm atm) {
+    public void subscribe(AtmListenerInterface atm) {
         if(listSubscribers == null) this.listSubscribers = new ArrayList<>();
-        listSubscribers.add(atm);
+        listSubscribers.add((Atm) atm);
     }
 
-    public void unsubscribe(Atm atm) {
+    public void unsubscribe(AtmListenerInterface atm) {
         listSubscribers.remove(atm);
     }
 
     public void notificate() {
-        Iterator<Atm> it = createIterator();
+        Iterator<Atm> it = createIterator(this.listSubscribers);
         while (it.hasMore()){
             it.getNext().notificate();
         }
     }
 
     @Override
-    public Iterator createIterator() {
+    public Iterator createIterator(List any) {
         return new AtmDepartmentIteratorImpl<>(this.listAtm);
     }
 
