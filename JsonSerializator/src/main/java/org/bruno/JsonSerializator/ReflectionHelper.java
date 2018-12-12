@@ -23,6 +23,21 @@ public class ReflectionHelper {
         return null;
     }
 
+    private static Set<Class> WRAPPER_TYPES = new HashSet(Arrays
+            .asList(Boolean.class,
+                    Character.class,
+                    Byte.class,
+                    Short.class,
+                    Integer.class,
+                    Long.class,
+                    Float.class,
+                    Double.class,
+                    Void.class));
+
+    public static boolean isWrapperType(Class clazz) {
+        return WRAPPER_TYPES.contains(clazz);
+    }
+
     static ArrayList<Method> getAllAnnotations (Class type, Class annotationClass) {
         ArrayList<Method> list = new ArrayList<>();
         for (Method method : type.getDeclaredMethods()) {

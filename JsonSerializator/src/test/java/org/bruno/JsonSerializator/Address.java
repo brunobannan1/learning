@@ -1,5 +1,7 @@
 package org.bruno.JsonSerializator;
 
+import java.util.Objects;
+
 public class Address{
 
     private String city;
@@ -12,23 +14,32 @@ public class Address{
         this.city = city;
     }
 
-    public Address(String city) {
-        this.city = city;
-    }
+    private Person person;
 
-    @Override
-    public String toString() {
-        return "Address [city=" + city +"]";
+    public Address(String city, Person person) {
+        this.city = city;
+        this.person = person;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return Objects.equals(city, address.city) &&
+                Objects.equals(person, address.person);
+    }
 
-        Address that = (Address) o;
+    @Override
+    public int hashCode() {
+        return Objects.hash(city, person);
+    }
 
-        if (!city.equals(that.city)) return false;
-        return true;
+    @Override
+    public String toString() {
+        return "Address{" +
+                "city='" + city + '\'' +
+                ", person=" + person +
+                '}';
     }
 }
