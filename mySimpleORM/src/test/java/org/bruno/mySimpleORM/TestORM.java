@@ -50,7 +50,7 @@ public class TestORM {
         Connection connection = ConnectionInitializator.getConnection();
         Executor executor = new Executor(connection);
         executor.executeUpdate(query);
-        String del = "delete from public.\"Person\"";executor.executeUpdate(del);
+        //String del = "delete from public.\"Person\"";executor.executeUpdate(del);
     }
 
     @Test
