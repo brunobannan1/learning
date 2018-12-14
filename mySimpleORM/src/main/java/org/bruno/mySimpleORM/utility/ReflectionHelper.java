@@ -1,18 +1,14 @@
-package org.bruno.JsonSerializator;
+package org.bruno.mySimpleORM.utility;
 
-import java.lang.annotation.*;
-import java.lang.reflect.*;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 
 public class ReflectionHelper {
     private ReflectionHelper() {
-    }
-
-    static boolean isAnnotationExsistOnField(Field field, Annotation annotation) {
-        List<Annotation> list = Arrays.asList(field.getAnnotations());
-        if(list.contains(annotation)) return true;
-        return false;
     }
 
     static <T> T instantiate(Class<T> type, Object... args) {
@@ -56,7 +52,7 @@ public class ReflectionHelper {
         return list;
     }
 
-    static Map<String, Object> getAllFields (Object o) throws IllegalAccessException{
+    public static Map<String, Object> getAllFields (Object o) throws IllegalAccessException{
         Map<String, Object> map = new HashMap<>();
         Class clazz = o.getClass();
         Field listFields[] = clazz.getDeclaredFields();
