@@ -2,17 +2,18 @@ package org.bruno.JsonSerializator;
 
 import javax.json.*;
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.util.Map;
 
 public class JsonSerializator {
 
     public static JsonObject serialize (Object o) throws IllegalAccessException{
-        Map<String, Object> mapFields = ReflectionHelper.getAllFields(o);
+        Map<Field, Object> mapFields = ReflectionHelper.getAllFields(o);
         JsonObjectBuilder builder = Json.createObjectBuilder();
-        for(Map.Entry<String, Object> entry : mapFields.entrySet()) {
+        for(Map.Entry<Field, Object> entry : mapFields.entrySet()) {
             Object iterateObject = entry.getValue();
             if(iterateObject == null) {
-                builder.add(entry.getKey(),JsonObject.NULL);
+                builder.add(entry.getKey().getName(),JsonObject.NULL);
             } else
             if(iterateObject.getClass().isArray()) {
                 int length = Array.getLength(iterateObject);
@@ -23,13 +24,13 @@ public class JsonSerializator {
                     } else
                     arrBuilder.add(Array.get(iterateObject,i).toString());
                 }
-                builder.add(entry.getKey(), arrBuilder);
+                builder.add(entry.getKey().getName(), arrBuilder);
             }
             else
             if(!(iterateObject.getClass().isArray() || iterateObject.getClass() == String.class || ReflectionHelper.isWrapperType(iterateObject.getClass())) ) {
-                builder.add(entry.getKey(),serialize(iterateObject));
+                builder.add(entry.getKey().getName(),serialize(iterateObject));
             } else
-                builder.add(entry.getKey(), entry.getValue().toString());
+                builder.add(entry.getKey().getName(), entry.getValue().toString());
         }
         JsonObject finalString = builder.build();
         return finalString;
