@@ -11,6 +11,13 @@ public class ReflectionHelper {
     private ReflectionHelper() {
     }
 
+/*    public static boolean isAnnotationExsistOnField(Field field, Class clazz) {
+        List<Annotation> list = (Arrays.asList(field.getDeclaredAnnotations()));
+        List<Class> listz = list.stream().map(p -> p.getClass()).collect(Collectors.toList());
+        if(listz.contains(clazz)) return true;
+        return false;
+    }*/
+
     static <T> T instantiate(Class<T> type, Object... args) {
         try {
             if (args.length == 0) {
@@ -52,13 +59,13 @@ public class ReflectionHelper {
         return list;
     }
 
-    public static Map<String, Object> getAllFields (Object o) throws IllegalAccessException{
-        Map<String, Object> map = new HashMap<>();
+    public static Map<Field, Object> getAllFields (Object o) throws IllegalAccessException{
+        Map<Field, Object> map = new HashMap<>();
         Class clazz = o.getClass();
         Field listFields[] = clazz.getDeclaredFields();
         for (Field field : listFields) {
             field.setAccessible(true);
-            map.put(field.getName(), field.get(o));
+            map.put(field, field.get(o));
         }
         return map;
     }

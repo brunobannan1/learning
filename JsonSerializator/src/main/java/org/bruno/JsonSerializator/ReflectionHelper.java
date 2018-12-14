@@ -56,13 +56,13 @@ public class ReflectionHelper {
         return list;
     }
 
-    static Map<String, Object> getAllFields (Object o) throws IllegalAccessException{
-        Map<String, Object> map = new HashMap<>();
+    static Map<Field, Object> getAllFields (Object o) throws IllegalAccessException{
+        Map<Field, Object> map = new HashMap<>();
         Class clazz = o.getClass();
         Field listFields[] = clazz.getDeclaredFields();
         for (Field field : listFields) {
             field.setAccessible(true);
-            map.put(field.getName(), field.get(o));
+            map.put(field, field.get(o));
         }
         return map;
     }

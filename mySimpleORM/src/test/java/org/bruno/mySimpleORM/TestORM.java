@@ -50,5 +50,19 @@ public class TestORM {
         Connection connection = ConnectionInitializator.getConnection();
         Executor executor = new Executor(connection);
         executor.executeUpdate(query);
+        String del = "delete from public.\"Person\"";executor.executeUpdate(del);
+    }
+
+    @Test
+    public void houseSaveTest() {
+        String[] ulitsi = {"Pervomayskaya","Piterskaya","Lenina"};
+        int[] neplatyat = {1,2,9,23,43};
+        House house = new House(100,2,"Nikolay",ulitsi,"Nijegorodskaya",neplatyat);
+        String query = ORM.saveObjectToDB(house);
+        System.out.println(query);
+        Connection connection = ConnectionInitializator.getConnection();
+        Executor executor = new Executor(connection);
+        executor.executeUpdate(query);
+        //String del = "delete from public.\"House\"";executor.executeUpdate(del);
     }
 }

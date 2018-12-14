@@ -1,11 +1,13 @@
 package org.bruno.mySimpleORM;
 
+import org.bruno.mySimpleORM.utility.AutoIncrement;
+
 import java.util.Arrays;
 import java.util.Objects;
 
 public class Person {
 
-    private int id;
+    private @AutoIncrement int id;
     private String fio;
     private int weight;
     private int age;
