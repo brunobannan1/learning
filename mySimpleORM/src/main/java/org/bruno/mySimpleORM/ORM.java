@@ -8,6 +8,7 @@ import org.postgresql.jdbc4.Jdbc4Array;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.util.Map;
 
@@ -70,7 +71,7 @@ public final class ORM {
         Executor executor = new Executor(connection);
         Field[] listFields = ReflectionHelper.getAllClassFields(clazz);
         String query = "select * from public.\"" + clazz.getName().substring(clazz.getName().lastIndexOf('.')+1) + "\" " + condition;
-        Object arguments[] = executor.executeQuery(query, (resultSet) -> {
+        /*Object arguments[] = executor.executeQuery(query, (resultSet) -> {
                     Object args[] = new Object[listFields.length];
                     resultSet.next();
                     int start = 0;
@@ -80,13 +81,33 @@ public final class ORM {
                             java.sql.Array temp = resultSet.getArray(field.getName());
                             args[i] = temp.getArray();
                         } else
-                        args[i] = resultSet.getObject(field.getName());
+                            args[i] = resultSet.getObject(field.getName());
                         start++;
                     }
                     System.out.println(args);
                     return args;
                 }
         );
-        return ReflectionHelper.instantiate(clazz, arguments);
+        try {
+            Object obj = clazz.getDeclaredConstructor().newInstance();
+            Map<Field, Object> fields = ReflectionHelper.getAllObjectFields(obj);
+            int start = 0;
+            for(Map.Entry<Field, Object> entry : fields.entrySet()) {
+                int i = start;
+                if(entry.getKey().getName() == arguments[i].getClass().getName()) {
+
+                }
+                i++;
+            }
+            *//*for(int i = 0; i < fields.entrySet().size(); i++) {
+                fields[i].setAccessible(true);
+                if(fields[i].getName() == ) {
+                    fields[i].set(, );
+                }
+            }*/
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
     }
 }

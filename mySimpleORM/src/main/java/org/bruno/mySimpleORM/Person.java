@@ -14,6 +14,10 @@ public class Person {
     private boolean canDoProgramming;
     private char[] lastMarks;
 
+    public Person() {
+
+    }
+
     public Person(int id, String fio, int weight, int age, boolean canDoProgramming, char[] lastMarks) {
         this.id = id;
         this.fio = fio;
