@@ -4,7 +4,6 @@ import org.bruno.mySimpleORM.utility.AutoIncrement;
 import org.bruno.mySimpleORM.utility.ConnectionInitializator;
 import org.bruno.mySimpleORM.utility.Executor;
 import org.bruno.mySimpleORM.utility.ReflectionHelper;
-import org.postgresql.jdbc4.Jdbc4Array;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -69,45 +68,27 @@ public final class ORM {
     public static Object createObjectFromDB(Class clazz, String condition) {
         Connection connection = ConnectionInitializator.getConnection();
         Executor executor = new Executor(connection);
-        Field[] listFields = ReflectionHelper.getAllClassFields(clazz);
-        String query = "select * from public.\"" + clazz.getName().substring(clazz.getName().lastIndexOf('.')+1) + "\" " + condition;
-        /*Object arguments[] = executor.executeQuery(query, (resultSet) -> {
-                    Object args[] = new Object[listFields.length];
-                    resultSet.next();
-                    int start = 0;
-                    for(Field field : listFields) {
-                        int i = start;
-                        if(resultSet.getObject(field.getName()).getClass() == Jdbc4Array.class) {
-                            java.sql.Array temp = resultSet.getArray(field.getName());
-                            args[i] = temp.getArray();
-                        } else
-                            args[i] = resultSet.getObject(field.getName());
-                        start++;
-                    }
-                    System.out.println(args);
-                    return args;
-                }
-        );
         try {
-            Object obj = clazz.getDeclaredConstructor().newInstance();
-            Map<Field, Object> fields = ReflectionHelper.getAllObjectFields(obj);
-            int start = 0;
-            for(Map.Entry<Field, Object> entry : fields.entrySet()) {
-                int i = start;
-                if(entry.getKey().getName() == arguments[i].getClass().getName()) {
-
-                }
-                i++;
+            Field[] listFields = ReflectionHelper.getAllClassFields(clazz);
+            Object object = clazz.getConstructor().newInstance();
+            for (Field field : listFields) {
+                String query = "select " + field.getName() + " from public.\"" + clazz.getName().substring(clazz.getName().lastIndexOf('.') + 1) + "\" " + condition;
+                executor.executeQuery(query, resultSet -> {
+                    String name = field.getName();
+                    resultSet.next();
+                    try {
+                        Field fieldToExchange = object.getClass().getDeclaredField(name);
+                        fieldToExchange.setAccessible(true);
+                        fieldToExchange.set(object, resultSet.getObject(name));
+                    } catch (NoSuchFieldException | IllegalAccessException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return true;
+                });
             }
-            *//*for(int i = 0; i < fields.entrySet().size(); i++) {
-                fields[i].setAccessible(true);
-                if(fields[i].getName() == ) {
-                    fields[i].set(, );
-                }
-            }*/
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            return object;
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             throw new RuntimeException(e);
         }
-        return null;
     }
 }

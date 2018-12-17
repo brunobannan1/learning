@@ -1,1 +1,1 @@
-insert into persons (canDoProgramming,weight,lastMarks,id,fio,age) values (false,100,'{A,B,C}',1,Meksikawka,50)
+insert into persons (canDoProgramming,weight,lastmarks,id,fio,age) values (false,100,'{A,B,C}',1,Meksikawka,50)

@@ -2,29 +2,28 @@ package org.bruno.mySimpleORM;
 
 import org.bruno.mySimpleORM.utility.AutoIncrement;
 
-import java.util.Arrays;
 import java.util.Objects;
 
 public class Person {
 
-    private @AutoIncrement int id;
+    private @AutoIncrement long id;
     private String fio;
-    private int weight;
-    private int age;
-    private boolean canDoProgramming;
-    private char[] lastMarks;
+    private long weight;
+    private long age;
+    private boolean candoprogramming;
+    private String lastmarks;
 
     public Person() {
 
     }
 
-    public Person(int id, String fio, int weight, int age, boolean canDoProgramming, char[] lastMarks) {
+    public Person(long id, String fio, long weight, long age, boolean canDoProgramming, String lastmarks) {
         this.id = id;
         this.fio = fio;
         this.weight = weight;
         this.age = age;
-        this.canDoProgramming = canDoProgramming;
-        this.lastMarks = lastMarks;
+        this.candoprogramming = canDoProgramming;
+        this.lastmarks = lastmarks;
     }
 
     @Override
@@ -35,16 +34,14 @@ public class Person {
         return id == person.id &&
                 weight == person.weight &&
                 age == person.age &&
-                canDoProgramming == person.canDoProgramming &&
+                candoprogramming == person.candoprogramming &&
                 Objects.equals(fio, person.fio) &&
-                Arrays.equals(lastMarks, person.lastMarks);
+                Objects.equals(lastmarks, person.lastmarks);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(id, fio, weight, age, canDoProgramming);
-        result = 31 * result + Arrays.hashCode(lastMarks);
-        return result;
+        return Objects.hash(id, fio, weight, age, candoprogramming, lastmarks);
     }
 
     @Override
@@ -54,8 +51,8 @@ public class Person {
                 ", fio='" + fio + '\'' +
                 ", weight=" + weight +
                 ", age=" + age +
-                ", canDoProgramming=" + canDoProgramming +
-                ", lastMarks=" + Arrays.toString(lastMarks) +
+                ", candoprogramming=" + candoprogramming +
+                ", lastmarks='" + lastmarks + '\'' +
                 '}';
     }
 }
