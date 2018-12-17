@@ -1,6 +1,7 @@
 package org.bruno.mySimpleORM.utility;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -18,7 +19,7 @@ public class ReflectionHelper {
         return false;
     }*/
 
-    static <T> T instantiate(Class<T> type, Object... args) {
+    public static <T> T instantiate(Class<T> type, Object... args) {
         try {
             if (args.length == 0) {
                 return type.getDeclaredConstructor().newInstance();
@@ -47,11 +48,11 @@ public class ReflectionHelper {
         return WRAPPER_TYPES.contains(clazz);
     }
 
-    static ArrayList<Method> getAllAnnotations (Class type, Class annotationClass) {
+    static ArrayList<Method> getAllAnnotations(Class type, Class annotationClass) {
         ArrayList<Method> list = new ArrayList<>();
         for (Method method : type.getDeclaredMethods()) {
             for (Annotation annotation : method.getDeclaredAnnotations()) {
-                if(annotation.annotationType() == annotationClass) {
+                if (annotation.annotationType() == annotationClass) {
                     list.add(method);
                 }
             }
@@ -59,7 +60,12 @@ public class ReflectionHelper {
         return list;
     }
 
-    public static Map<Field, Object> getAllFields (Object o) throws IllegalAccessException{
+    public static Field[] getAllClassFields (Class clazz){
+        Field listFields[] = clazz.getDeclaredFields();
+        return listFields;
+    }
+
+    public static Map<Field, Object> getAllObjectFields(Object o) throws IllegalAccessException {
         Map<Field, Object> map = new HashMap<>();
         Class clazz = o.getClass();
         Field listFields[] = clazz.getDeclaredFields();
@@ -86,5 +92,15 @@ public class ReflectionHelper {
     static private Class<?>[] toClasses(Object[] args) {
         List<Class<?>> classes = Arrays.stream(args).map(Object::getClass).collect(Collectors.toList());
         return classes.toArray(new Class<?>[classes.size()]);
+    }
+
+    public static CallBack executeCallback(Object o) {
+        if (o.getClass() == Integer.class) return (a) -> Integer.getInteger(a);
+        if (o.getClass() == Long.class) return (a) -> Long.getLong(a);
+        if (o.getClass() == Character.class) return (a) -> a.charAt(0);
+        if (o.getClass() == Boolean.class) return (a) -> Boolean.getBoolean(a);
+        if (o.getClass() == Array.class) return (a) -> a;
+
+        return null;
     }
 }

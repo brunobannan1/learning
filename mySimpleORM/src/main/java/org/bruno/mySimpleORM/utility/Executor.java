@@ -1,6 +1,7 @@
 package org.bruno.mySimpleORM.utility;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -17,6 +18,21 @@ public class Executor {
             Statement statement = connection.createStatement();
             statement.execute(query);
             return statement.getUpdateCount();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public <T> T executeQuery(String query, ResultHandler<T> resultHandler) {
+        try {
+            Statement statement = connection.createStatement();
+            statement.execute(query);
+            ResultSet resultSet = statement.getResultSet();
+            T result = resultHandler.handle(resultSet);
+            resultSet.close();
+            statement.close();
+
+            return result;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
