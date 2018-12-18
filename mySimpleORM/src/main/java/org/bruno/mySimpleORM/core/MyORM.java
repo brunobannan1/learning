@@ -1,8 +1,7 @@
-package org.bruno.mySimpleORM;
+package org.bruno.mySimpleORM.core;
 
-import org.bruno.mySimpleORM.utility.AutoIncrement;
-import org.bruno.mySimpleORM.utility.ConnectionInitializator;
-import org.bruno.mySimpleORM.utility.Executor;
+import org.bruno.mySimpleORM.executors.Executor;
+import org.bruno.mySimpleORM.interfaces.AutoIncrement;
 import org.bruno.mySimpleORM.utility.ReflectionHelper;
 
 import java.lang.reflect.Array;
@@ -11,26 +10,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.util.Map;
 
-public final class ORM {
+public final class MyORM {
+    private final Connection connection;
 
-    private ORM() {
+    public MyORM(Connection connection) {
+        this.connection = connection;
     }
 
-    public static void saveObjectToDB(Object o) {
+    public void save(Object o) {
         try {
-            Connection connection = ConnectionInitializator.getConnection();
             Executor executor = new Executor(connection);
-
             Map<Field, Object> map = ReflectionHelper.getAllObjectFields(o);
-
-            /*List<Field> list = new ArrayList<>();
-
-            for (Map.Entry<Field, Object> entry: map.entrySet()) {
-                if(ReflectionHelper.isAnnotationExsistOnField(entry.getKey(), AutoIncrement.class))
-                    list.add(entry.getKey());
-            }
-            map.remove(list);
-            */
             String query = generateUpdateString(map, o);
             executor.executeUpdate(query);
         } catch (IllegalAccessException e) {
@@ -38,26 +28,26 @@ public final class ORM {
         }
     }
 
-    private static String generateUpdateString(Map<Field, Object> map, Object o) {
-        String tableName = "public.\"" + o.getClass().getName().substring(o.getClass().getName().lastIndexOf('.')+1) + "\"";
+    private String generateUpdateString(Map<Field, Object> map, Object o) {
+        String tableName = "public.\"" + o.getClass().getName().substring(o.getClass().getName().lastIndexOf('.') + 1) + "\"";
         StringBuilder names = new StringBuilder("insert into " + tableName + " (");
         StringBuilder questionMarks = new StringBuilder("(");
-        for(Map.Entry<Field, Object> entry : map.entrySet()) {
-            if(entry.getKey().isAnnotationPresent(AutoIncrement.class)) continue;
-            names.append("\"" + entry.getKey().getName()+"\",");
-            if(entry.getValue().getClass().isArray()) {
+        for (Map.Entry<Field, Object> entry : map.entrySet()) {
+            if (entry.getKey().isAnnotationPresent(AutoIncrement.class)) continue;
+            names.append("\"" + entry.getKey().getName() + "\",");
+            if (entry.getValue().getClass().isArray()) {
                 int length = Array.getLength(entry.getValue());
                 StringBuilder sb = new StringBuilder("'{");
                 for (int i = 0; i < length; i++) {
-                    sb.append(Array.get(entry.getValue(),i).toString()+",");
+                    sb.append(Array.get(entry.getValue(), i).toString() + ",");
 
                 }
-                questionMarks.append(sb.deleteCharAt(sb.length()-1).append("}'").toString()+",");
+                questionMarks.append(sb.deleteCharAt(sb.length() - 1).append("}'").toString() + ",");
             } else
-                questionMarks.append("\'"+entry.getValue()+"\',");
+                questionMarks.append("\'" + entry.getValue() + "\',");
         }
-        names.deleteCharAt(names.length()-1);
-        questionMarks.deleteCharAt(questionMarks.length()-1);
+        names.deleteCharAt(names.length() - 1);
+        questionMarks.deleteCharAt(questionMarks.length() - 1);
 
         names.append(")");
         questionMarks.append(")");
@@ -65,8 +55,7 @@ public final class ORM {
         return names.append(" values ").append(questionMarks).toString();
     }
 
-    public static Object createObjectFromDB(Class clazz, String condition) {
-        Connection connection = ConnectionInitializator.getConnection();
+    public Object read(Class clazz, String condition) {
         Executor executor = new Executor(connection);
         try {
             Field[] listFields = ReflectionHelper.getAllClassFields(clazz);

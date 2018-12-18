@@ -1,7 +1,8 @@
 package org.bruno.mySimpleORM;
 
+import org.bruno.mySimpleORM.interfaces.DBService;
 import org.bruno.mySimpleORM.utility.ConnectionInitializator;
-import org.bruno.mySimpleORM.utility.Executor;
+import org.bruno.mySimpleORM.executors.Executor;
 import org.junit.*;
 
 import java.sql.Connection;
@@ -9,6 +10,8 @@ import java.sql.SQLException;
 import java.util.Random;
 
 public class TestORM {
+    Connection connection = ConnectionInitializator.getConnection();
+    DBService dbService = new MyOrmDBServiceImpl(connection);
 
     @Before
     public void initialize() {
@@ -22,7 +25,7 @@ public class TestORM {
         try {
             executor.executeQuery(query,
                     resultSet -> {
-                        while(true) {
+                        while (true) {
                             resultSet.next();
                             System.out.println(
                                     "Id: " + resultSet.getInt(1) +
@@ -43,22 +46,24 @@ public class TestORM {
     @Test
     public void testUpdateStringGeneration() {
         String lastMarks = "A,B,C,D,E,F";
-        Person person = new Person(1,"Meksikawka", 100,50,false, lastMarks);
-        ORM.saveObjectToDB(person);
+        Person person = new Person(1, "Meksikawka", 100, 50, false, lastMarks);
+        dbService.save(person);
         Connection connection = ConnectionInitializator.getConnection();
         Executor executor = new Executor(connection);
         //String del = "delete from public.\"Person\"";executor.executeUpdate(del);
+        dbService.shutdown();
     }
 
     @Test
     public void houseSaveTest() {
-        String[] ulitsi = {"Pervomayskaya","Piterskaya","Lenina"};
-        long[] neplatyat = {1,2,9,23,43};
-        House house = new House(100,2,"Nikolay",ulitsi,"Nijegorodskaya",neplatyat);
-        ORM.saveObjectToDB(house);
+        String[] ulitsi = {"Pervomayskaya", "Piterskaya", "Lenina"};
+        long[] neplatyat = {1, 2, 9, 23, 43};
+        House house = new House(100, 2, "Nikolay", ulitsi, "Nijegorodskaya", neplatyat);
+        dbService.save(house);
         Connection connection = ConnectionInitializator.getConnection();
         Executor executor = new Executor(connection);
         //String del = "delete from public.\"House\"";executor.executeUpdate(del);
+        dbService.shutdown();
     }
 
     @Test
@@ -69,7 +74,7 @@ public class TestORM {
             resultSet.next();
             return resultSet.getInt(1);
         });
-        String condition = "where id = \'"+(id+1)+"\'";
+        String condition = "where id = \'" + (id + 1) + "\'";
 
         String lastMarks = "A,A,A,B,A,A,A,A,A,B,A";
         Random rndm = new Random();
@@ -78,13 +83,15 @@ public class TestORM {
         boolean can = rndm.nextBoolean();
         String string = String.valueOf(rndm.nextInt());
 
-        Person person1 = new Person(id+1,string, weight,age,can, string);
+        Person person1 = new Person(id + 1, string, weight, age, can, string);
 
-        ORM.saveObjectToDB(person1);
+        dbService.save(person1);
 
-        Person person = (Person) ORM.createObjectFromDB(Person.class, condition);
+        Person person = (Person) dbService.read(Person.class, condition);
 
-        Assert.assertEquals(person1,person);
+        Assert.assertEquals(person1, person);
         System.out.println(person);
+
+        dbService.shutdown();
     }
 }

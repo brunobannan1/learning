@@ -1,4 +1,6 @@
-package org.bruno.mySimpleORM.utility;
+package org.bruno.mySimpleORM.executors;
+
+import org.bruno.mySimpleORM.interfaces.ResultHandler;
 
 import java.sql.Connection;
 import java.sql.ResultSet;

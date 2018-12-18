@@ -1,4 +1,4 @@
-package org.bruno.mySimpleORM.utility;
+package org.bruno.mySimpleORM.interfaces;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

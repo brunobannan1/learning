@@ -1,4 +1,4 @@
-package org.bruno.mySimpleORM.utility;
+package org.bruno.mySimpleORM.interfaces;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
