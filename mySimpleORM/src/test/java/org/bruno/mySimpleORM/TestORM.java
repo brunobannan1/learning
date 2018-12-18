@@ -1,5 +1,8 @@
 package org.bruno.mySimpleORM;
 
+import org.bruno.mySimpleORM.dao.PersonDao;
+import org.bruno.mySimpleORM.entities.House;
+import org.bruno.mySimpleORM.entities.Person;
 import org.bruno.mySimpleORM.interfaces.DBService;
 import org.bruno.mySimpleORM.utility.ConnectionInitializator;
 import org.bruno.mySimpleORM.executors.Executor;
@@ -12,6 +15,7 @@ import java.util.Random;
 public class TestORM {
     Connection connection = ConnectionInitializator.getConnection();
     DBService dbService = new MyOrmDBServiceImpl(connection);
+    PersonDao pd = new PersonDao(dbService);
 
     @Before
     public void initialize() {
@@ -47,11 +51,10 @@ public class TestORM {
     public void testUpdateStringGeneration() {
         String lastMarks = "A,B,C,D,E,F";
         Person person = new Person(1, "Meksikawka", 100, 50, false, lastMarks);
-        dbService.save(person);
+        pd.save(person);
         Connection connection = ConnectionInitializator.getConnection();
         Executor executor = new Executor(connection);
         //String del = "delete from public.\"Person\"";executor.executeUpdate(del);
-        dbService.shutdown();
     }
 
     @Test
@@ -63,7 +66,6 @@ public class TestORM {
         Connection connection = ConnectionInitializator.getConnection();
         Executor executor = new Executor(connection);
         //String del = "delete from public.\"House\"";executor.executeUpdate(del);
-        dbService.shutdown();
     }
 
     @Test

@@ -1,5 +1,6 @@
-package org.bruno.mySimpleORM;
+package org.bruno.mySimpleORM.dao;
 
+import org.bruno.mySimpleORM.entities.Person;
 import org.bruno.mySimpleORM.interfaces.DBService;
 
 import java.util.List;
