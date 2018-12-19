@@ -1,21 +1,22 @@
 package org.bruno.mySimpleORM;
 
-import org.bruno.mySimpleORM.dao.PersonDao;
 import org.bruno.mySimpleORM.entities.House;
 import org.bruno.mySimpleORM.entities.Person;
+import org.bruno.mySimpleORM.executors.Executor;
 import org.bruno.mySimpleORM.interfaces.DBService;
 import org.bruno.mySimpleORM.utility.ConnectionInitializator;
-import org.bruno.mySimpleORM.executors.Executor;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Random;
 
 public class TestORM {
     Connection connection = ConnectionInitializator.getConnection();
     DBService dbService = new MyOrmDBServiceImpl(connection);
-    PersonDao pd = new PersonDao(dbService);
 
     @Before
     public void initialize() {
@@ -51,7 +52,7 @@ public class TestORM {
     public void testUpdateStringGeneration() {
         String lastMarks = "A,B,C,D,E,F";
         Person person = new Person(1, "Meksikawka", 100, 50, false, lastMarks);
-        pd.save(person);
+        dbService.save(person);
         Connection connection = ConnectionInitializator.getConnection();
         Executor executor = new Executor(connection);
         //String del = "delete from public.\"Person\"";executor.executeUpdate(del);
@@ -95,5 +96,11 @@ public class TestORM {
         System.out.println(person);
 
         dbService.shutdown();
+    }
+
+    @Test
+    public void getAllTest() {
+        List<Object> persons = dbService.readAll(Person.class);
+        System.out.println(persons.toString());
     }
 }

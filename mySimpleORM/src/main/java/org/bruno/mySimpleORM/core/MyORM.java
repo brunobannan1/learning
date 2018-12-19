@@ -8,6 +8,8 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public final class MyORM {
@@ -79,5 +81,28 @@ public final class MyORM {
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<Object> getAll(Class o) {
+        List<Object> objects = new ArrayList<>();
+        String tableName = "public.\"" + o.getName().substring(o.getName().lastIndexOf('.') + 1) + "\"";
+        Executor executor = new Executor(connection);
+        int count = executor.executeQuery("select count (*) from " + tableName, resultSet -> {
+            resultSet.next();
+            return resultSet.getInt(1);
+        });
+        int[] id = new int[count];
+        executor.executeQuery("select id from " + tableName, resultSet -> {
+            for (int i = 0; i < count; i++) {
+                resultSet.next();
+                id[i] = resultSet.getInt(1);
+            }
+            return id;
+        });
+        for (int i : id) {
+            objects.add(read(o, " where id = \'" + id[i] + "\'"));
+            if (i >= id.length - 1) break;
+        }
+        return objects;
     }
 }

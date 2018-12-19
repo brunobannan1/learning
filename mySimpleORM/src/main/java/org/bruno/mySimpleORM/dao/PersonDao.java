@@ -1,26 +1,12 @@
 package org.bruno.mySimpleORM.dao;
 
-import org.bruno.mySimpleORM.entities.Person;
-import org.bruno.mySimpleORM.interfaces.DBService;
-
-import java.util.List;
+import org.bruno.mySimpleORM.core.MyORM;
 
 public class PersonDao {
-    private DBService myOrmDBService;
+    private MyORM myORM;
 
-    public PersonDao(DBService myOrmDBService) {
-        this.myOrmDBService = myOrmDBService;
+    public PersonDao(MyORM myORM) {
+        this.myORM = myORM;
     }
 
-    public void save(Person person) {
-        myOrmDBService.save(person);
-    }
-
-    public Person read(String condition) {
-        return (Person) myOrmDBService.read(Person.class, condition);
-    }
-
-    public List<Object> readAll() {
-        return null;
-    }
 }

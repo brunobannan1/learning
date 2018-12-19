@@ -34,7 +34,7 @@ public final class MyOrmDBServiceImpl implements DBService {
 
     @Override
     public List<Object> readAll(Class clazz) {
-        return null;
+        return myORM.getAll(clazz);
     }
 
     @Override
