@@ -1,4 +1,4 @@
-package org.bruno.mySimpleORM.utility;
+package org.bruno.mySimpleORM.executors;
 
 import java.sql.Connection;
 

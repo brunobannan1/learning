@@ -1,4 +1,4 @@
-package org.bruno.mySimpleORM;
+package org.bruno.mySimpleORM.entities;
 
 public class House {
 

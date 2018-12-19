@@ -1,5 +1,7 @@
 package org.bruno.mySimpleORM.utility;
 
+import org.bruno.mySimpleORM.interfaces.CallBack;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -9,15 +11,19 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ReflectionHelper {
+    private static Set<Class> WRAPPER_TYPES = new HashSet(Arrays
+            .asList(Boolean.class,
+                    Character.class,
+                    Byte.class,
+                    Short.class,
+                    Integer.class,
+                    Long.class,
+                    Float.class,
+                    Double.class,
+                    Void.class));
+
     private ReflectionHelper() {
     }
-
-/*    public static boolean isAnnotationExsistOnField(Field field, Class clazz) {
-        List<Annotation> list = (Arrays.asList(field.getDeclaredAnnotations()));
-        List<Class> listz = list.stream().map(p -> p.getClass()).collect(Collectors.toList());
-        if(listz.contains(clazz)) return true;
-        return false;
-    }*/
 
     public static <T> T instantiate(Class<T> type, Object... args) {
         try {
@@ -32,17 +38,6 @@ public class ReflectionHelper {
         }
         return null;
     }
-
-    private static Set<Class> WRAPPER_TYPES = new HashSet(Arrays
-            .asList(Boolean.class,
-                    Character.class,
-                    Byte.class,
-                    Short.class,
-                    Integer.class,
-                    Long.class,
-                    Float.class,
-                    Double.class,
-                    Void.class));
 
     public static boolean isWrapperType(Class clazz) {
         return WRAPPER_TYPES.contains(clazz);
@@ -60,15 +55,15 @@ public class ReflectionHelper {
         return list;
     }
 
-    public static Field[] getAllClassFields (Class clazz){
-        Field listFields[] = clazz.getDeclaredFields();
+    public static Field[] getAllClassFields(Class clazz) {
+        Field[] listFields = clazz.getDeclaredFields();
         return listFields;
     }
 
     public static Map<Field, Object> getAllObjectFields(Object o) throws IllegalAccessException {
         Map<Field, Object> map = new HashMap<>();
         Class clazz = o.getClass();
-        Field listFields[] = clazz.getDeclaredFields();
+        Field[] listFields = clazz.getDeclaredFields();
         for (Field field : listFields) {
             field.setAccessible(true);
             map.put(field, field.get(o));
