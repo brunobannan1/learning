@@ -1,4 +1,4 @@
-package org.bruno.mySimpleORM;
+package org.bruno.mySimpleORM.services;
 
 import org.bruno.mySimpleORM.core.MyORM;
 import org.bruno.mySimpleORM.interfaces.DBService;

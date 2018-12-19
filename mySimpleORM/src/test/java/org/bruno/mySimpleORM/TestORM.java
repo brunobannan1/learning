@@ -1,9 +1,10 @@
 package org.bruno.mySimpleORM;
 
-import org.bruno.mySimpleORM.entities.House;
-import org.bruno.mySimpleORM.entities.Person;
+import org.bruno.mySimpleORM.entities.*;
 import org.bruno.mySimpleORM.executors.Executor;
 import org.bruno.mySimpleORM.interfaces.DBService;
+import org.bruno.mySimpleORM.services.HibernateDBServiceImpl;
+import org.bruno.mySimpleORM.services.MyOrmDBServiceImpl;
 import org.bruno.mySimpleORM.utility.ConnectionInitializator;
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,6 +18,7 @@ import java.util.Random;
 public class TestORM {
     Connection connection = ConnectionInitializator.getConnection();
     DBService dbService = new MyOrmDBServiceImpl(connection);
+    DBService hibService = new HibernateDBServiceImpl();
 
     @Before
     public void initialize() {
@@ -103,4 +105,31 @@ public class TestORM {
         List<Object> persons = dbService.readAll(Person.class);
         System.out.println(persons.toString());
     }
+
+    @Test
+    public void hibernateTest() {
+        String status = hibService.getLocalStatus();
+        System.out.println("Status: " + status);
+        Phone phone1 = new Phone("8800333984");
+        Phone phone2 = new Phone("1800333984");
+        Phone phone3 = new Phone("2800333984");
+        Phone[] array = new Phone[2];
+        array[0] = phone2;
+        array[1] = phone3;
+        Phone[] array1 = {phone1};
+        Address ad1 = new Address("Petropavlovskaya");
+        Address ad2 = new Address("Krepostnova");
+        hibService.save(ad1);
+        hibService.save(ad2);
+        hibService.save(phone1);
+        hibService.save(phone2);
+        hibService.save(phone3);
+        ItMan katya = new ItMan("Katya", 140, ad1, phone1);
+        ItMan kostya = new ItMan("Kostya", 120, ad2, phone2);
+        hibService.save(katya);
+        hibService.save(kostya);
+//        ItMan temp = (ItMan) hibService.read(ItMan.class, "1");
+        hibService.shutdown();
+    }
+
 }
