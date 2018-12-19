@@ -1,6 +1,7 @@
 package org.bruno.mySimpleORM.entities;
 
 import org.bruno.mySimpleORM.interfaces.AutoIncrement;
+
 import java.util.Objects;
 
 public class Person {

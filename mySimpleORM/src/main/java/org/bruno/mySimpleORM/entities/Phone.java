@@ -8,14 +8,26 @@ public class Phone implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @ManyToOne(targetEntity = ItMan.class)
+    @JoinColumn
+    private long itManId;
     private String number;
 
     public Phone() {
     }
 
-    public Phone(String number) {
+    public Phone(long itManId, String number) {
         this.setId(-1);
+        this.itManId = itManId;
         this.number = number;
+    }
+
+    public long getItManId() {
+        return itManId;
+    }
+
+    public void setItManId(long itManId) {
+        this.itManId = itManId;
     }
 
     public long getId() {

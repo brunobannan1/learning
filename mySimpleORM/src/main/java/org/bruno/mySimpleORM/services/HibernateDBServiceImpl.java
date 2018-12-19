@@ -27,8 +27,9 @@ public class HibernateDBServiceImpl implements DBService {
         configuration.setProperty("hibernate.connection.url", "jdbc:postgresql:myDB");
         configuration.setProperty("hibernate.connection.username", "postgres");
         configuration.setProperty("hibernate.connection.password", "argon");
+        configuration.setProperty("hibernate.connection.autocommit", "true");
         configuration.setProperty("hibernate.show_sql", "true");
-        configuration.setProperty("hibernate.hbm2ddl.auto", "create");
+        //configuration.setProperty("hibernate.hbm2ddl.auto", "create");
         configuration.setProperty("hibernate.connection.useSSL", "false");
         configuration.setProperty("hibernate.enable_lazy_load_no_trans", "true");
 
@@ -51,18 +52,14 @@ public class HibernateDBServiceImpl implements DBService {
 
     @Override
     public void save(Object object) {
-        /*try (Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             session.save(object);
-        }*/
-        runInSession(session -> {
-            session.save(object);
-            return true;
-        });
+        }
     }
 
     @Override
     public Object read(Class clazz, String condition) {
-        long a = Long.getLong(condition);
+        long a = Long.parseLong(condition);
         return runInSession(session -> {
             return session.load(clazz, a);
         });

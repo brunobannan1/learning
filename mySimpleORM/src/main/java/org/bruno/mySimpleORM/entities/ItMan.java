@@ -2,23 +2,24 @@ package org.bruno.mySimpleORM.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 public class ItMan implements Serializable {
+    @OneToOne(cascade = CascadeType.ALL)
+    Address address;
+    @OneToMany(mappedBy = "itManId")
+    List<Phone> phone;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
     private int brainpower;
-    @OneToOne(cascade = CascadeType.ALL)
-    Address address;
-    @OneToOne(cascade = CascadeType.ALL)
-    Phone phone;
 
     public ItMan() {
     }
 
-    public ItMan(String name, int brainpower, Address address, Phone phone) {
+    public ItMan(String name, int brainpower, Address address, List<Phone> phone) {
         this.setId(-1);
         this.name = name;
         this.brainpower = brainpower;
@@ -58,11 +59,11 @@ public class ItMan implements Serializable {
         this.address = address;
     }
 
-    public Phone getPhone() {
+    public List<Phone> getPhone() {
         return phone;
     }
 
-    public void setPhone(Phone phone) {
+    public void setPhone(List<Phone> phone) {
         this.phone = phone;
     }
 

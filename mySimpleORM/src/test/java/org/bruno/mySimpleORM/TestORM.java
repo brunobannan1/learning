@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -110,25 +111,26 @@ public class TestORM {
     public void hibernateTest() {
         String status = hibService.getLocalStatus();
         System.out.println("Status: " + status);
-        Phone phone1 = new Phone("8800333984");
-        Phone phone2 = new Phone("1800333984");
-        Phone phone3 = new Phone("2800333984");
-        Phone[] array = new Phone[2];
-        array[0] = phone2;
-        array[1] = phone3;
-        Phone[] array1 = {phone1};
+        Phone phone1 = new Phone(1, "8800333984");
+        Phone phone2 = new Phone(2, "1800333984");
+        //Phone phone3 = new Phone(2,"2800333984");
+        ArrayList<Phone> array = new ArrayList<>();
+        ArrayList<Phone> array1 = new ArrayList<>();
+        array.add(phone1);
+        array1.add(phone2);
+        //array1.add(phone3);
         Address ad1 = new Address("Petropavlovskaya");
         Address ad2 = new Address("Krepostnova");
         hibService.save(ad1);
         hibService.save(ad2);
-        hibService.save(phone1);
-        hibService.save(phone2);
-        hibService.save(phone3);
-        ItMan katya = new ItMan("Katya", 140, ad1, phone1);
-        ItMan kostya = new ItMan("Kostya", 120, ad2, phone2);
+        ItMan katya = new ItMan("Katya", 140, ad1, array);
+        ItMan kostya = new ItMan("Kostya", 120, ad2, array1);
+//        hibService.save(phone1);
+//        hibService.save(phone2);
         hibService.save(katya);
         hibService.save(kostya);
-//        ItMan temp = (ItMan) hibService.read(ItMan.class, "1");
+        ItMan temp = (ItMan) hibService.read(ItMan.class, "1");
+        System.out.println(temp);
         hibService.shutdown();
     }
 
