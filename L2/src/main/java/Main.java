@@ -17,10 +17,10 @@ public class Main {
             Object[] objects = new Object[size];
 
             long mem2 = runtime.totalMemory() - runtime.freeMemory();
-            System.out.println((mem2 - mem)/size);
+            System.out.println((mem2 - mem) / size);
 
             System.out.println("New array of size: " + objects.length + " created");
-            for (int i = 0; i < size; i++ ) {
+            for (int i = 0; i < size; i++) {
                 objects[i] = new Object();
             }
             System.out.println("Created " + size + " objects");

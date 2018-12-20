@@ -8,7 +8,7 @@ import java.util.List;
 public class ItMan implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     Address address;
-    @OneToMany(mappedBy = "itManId")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "itManId")
     List<Phone> phone;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

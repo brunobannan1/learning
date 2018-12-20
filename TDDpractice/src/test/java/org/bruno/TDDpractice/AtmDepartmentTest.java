@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class AtmDepartmentTest {
     AtmDepartment atmDepartment;
-    Atm atm1,atm2;
+    Atm atm1, atm2;
     Card card;
 
     @Before
@@ -24,20 +24,20 @@ public class AtmDepartmentTest {
 
     // • Приложение может содержать несколько ATM
     @Test
-    public void departmentCanHaveMoreThanOneAtm () {
+    public void departmentCanHaveMoreThanOneAtm() {
         Assert.assertEquals(atmDepartment.getListAtm().get(0), atm1);
         Assert.assertEquals(atmDepartment.getListAtm().get(1), atm2);
     }
 
     // • Department может собирать сумму остатков со всех ATM
     @Test
-    public void departmentCanAcquireSumOfRemainingCacheOfAtms () throws IllegalAccessException {
+    public void departmentCanAcquireSumOfRemainingCacheOfAtms() throws IllegalAccessException {
         long sum = atmDepartment.acquireSum();
         Assert.assertTrue(sum == atm1.getCash() + atm2.getCash());
-        atm1.deposit(card.getCardNumber(),10,10,2);
+        atm1.deposit(card.getCardNumber(), 10, 10, 2);
         sum = atmDepartment.acquireSum();
         Assert.assertTrue(sum == atm1.getCash() + atm2.getCash());
-        atm2.withdraw(1111,500);
+        atm2.withdraw(1111, 500);
         sum = atmDepartment.acquireSum();
         Assert.assertTrue(sum == atm1.getCash() + atm2.getCash());
         Assert.assertTrue(card.getCash() == 120_500);
@@ -46,12 +46,12 @@ public class AtmDepartmentTest {
     // • Department может инициировать событие – восстановить состояние всех ATM до начального.
     //(начальные состояния у разных ATM могут быть разными)
     @Test
-    public void departmentCanResetHisAtmsStateToDefault () throws IllegalAccessException {
+    public void departmentCanResetHisAtmsStateToDefault() throws IllegalAccessException {
         long sum = atmDepartment.acquireSum();
         long beforeAtm1 = atm1.getCash();
         long beforeAtm2 = atm2.getCash();
-        atm1.deposit(card.getCardNumber(),10,10,2);
-        atm2.withdraw(1111,500);
+        atm1.deposit(card.getCardNumber(), 10, 10, 2);
+        atm2.withdraw(1111, 500);
         Assert.assertTrue(atmDepartment.acquireSum() == sum + 20_500);
         Assert.assertTrue(atm1.getSize100() == 1010);
         Assert.assertTrue(atm1.getSize1000() == 110);

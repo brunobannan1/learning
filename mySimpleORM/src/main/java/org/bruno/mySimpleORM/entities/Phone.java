@@ -10,23 +10,23 @@ public class Phone implements Serializable {
     private long id;
     @ManyToOne(targetEntity = ItMan.class)
     @JoinColumn
-    private long itManId;
+    private ItMan itManId;
     private String number;
 
     public Phone() {
     }
 
-    public Phone(long itManId, String number) {
+    public Phone(ItMan itManId, String number) {
         this.setId(-1);
         this.itManId = itManId;
         this.number = number;
     }
 
-    public long getItManId() {
+    public ItMan getItManId() {
         return itManId;
     }
 
-    public void setItManId(long itManId) {
+    public void setItManId(ItMan itManId) {
         this.itManId = itManId;
     }
 

@@ -111,20 +111,18 @@ public class TestORM {
     public void hibernateTest() {
         String status = hibService.getLocalStatus();
         System.out.println("Status: " + status);
-        Phone phone1 = new Phone(1, "8800333984");
-        Phone phone2 = new Phone(2, "1800333984");
-        //Phone phone3 = new Phone(2,"2800333984");
+        Address ad1 = new Address("Petropavlovskaya");
+        Address ad2 = new Address("Krepostnova");
+        Phone phone1 = new Phone(null, "8800333984");
+        Phone phone2 = new Phone(null, "1800333984");
         ArrayList<Phone> array = new ArrayList<>();
         ArrayList<Phone> array1 = new ArrayList<>();
         array.add(phone1);
         array1.add(phone2);
-        //array1.add(phone3);
-        Address ad1 = new Address("Petropavlovskaya");
-        Address ad2 = new Address("Krepostnova");
-        hibService.save(ad1);
-        hibService.save(ad2);
         ItMan katya = new ItMan("Katya", 140, ad1, array);
         ItMan kostya = new ItMan("Kostya", 120, ad2, array1);
+        hibService.save(ad1);
+        hibService.save(ad2);
 //        hibService.save(phone1);
 //        hibService.save(phone2);
         hibService.save(katya);

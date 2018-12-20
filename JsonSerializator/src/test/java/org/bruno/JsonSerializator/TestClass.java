@@ -4,9 +4,9 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class TestClass {
+    public boolean canMakeTests;
     private int size;
     private double dB;
-    public boolean canMakeTests;
     private String name;
     private int[] arrayInt;
     private char[] arrayChar;

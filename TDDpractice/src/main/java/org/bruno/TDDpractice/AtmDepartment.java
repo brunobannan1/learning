@@ -15,7 +15,7 @@ public class AtmDepartment implements Iterable {
 
     public AtmDepartment(ArrayList<Atm> listAtm) {
         this.listAtm = listAtm;
-        if(!listAtm.isEmpty()) {
+        if (!listAtm.isEmpty()) {
             this.cash = acquireSum();
         } else this.cash = 0;
     }
@@ -32,14 +32,14 @@ public class AtmDepartment implements Iterable {
     public long acquireSum() {
         Iterator<Atm> it = createIterator(this.listAtm);
         long sum = 0;
-        while(it.hasMore()) {
+        while (it.hasMore()) {
             sum = sum + it.getNext().getCash();
         }
         return sum;
     }
 
     public void subscribe(AtmListenerInterface atm) {
-        if(listSubscribers == null) this.listSubscribers = new ArrayList<>();
+        if (listSubscribers == null) this.listSubscribers = new ArrayList<>();
         listSubscribers.add((Atm) atm);
     }
 
@@ -49,7 +49,7 @@ public class AtmDepartment implements Iterable {
 
     public void notificate() {
         Iterator<Atm> it = createIterator(this.listSubscribers);
-        while (it.hasMore()){
+        while (it.hasMore()) {
             it.getNext().notificate();
         }
     }
@@ -74,9 +74,9 @@ public class AtmDepartment implements Iterable {
 
         @Override
         public T getNext() {
-            if(hasMore())
+            if (hasMore())
                 pointer++;
-            return list.get(pointer-1);
+            return list.get(pointer - 1);
         }
 
         @Override

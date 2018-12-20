@@ -3,10 +3,10 @@ import java.util.*;
 
 public class MyListImplementation<T> implements List<T> {
 
+    private final int DEF_SIZE = 20;
     private int pointer;
     private int size;
     private Object[] array;
-    private final int DEF_SIZE = 20;
 
     public MyListImplementation() {
         this.pointer = 0;
@@ -65,7 +65,7 @@ public class MyListImplementation<T> implements List<T> {
 
     @Override
     public boolean add(T t) {
-        add(array.length-1,t);
+        add(array.length - 1, t);
         return true;
     }
 
@@ -138,7 +138,7 @@ public class MyListImplementation<T> implements List<T> {
         final int s;
         Object[] elementData;
         if ((s = size) == (elementData = this.array).length)
-            elementData = Arrays.copyOf(array,array.length+1);
+            elementData = Arrays.copyOf(array, array.length + 1);
         System.arraycopy(elementData, index,
                 elementData, index + 1,
                 s - index);
