@@ -1,7 +1,9 @@
 package org.bruno.JsonSerializator;
 
 import com.google.gson.Gson;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class TestSerializator {
 
@@ -17,19 +19,19 @@ public class TestSerializator {
     //Поддержите массивы объектов и примитивных типов, и коллекции из стандартный библиотерки.
 
     @Test
-    public void canSerializePrimitivesAndPrimitiveArrays() throws IllegalAccessException{
-        int array[] = {0,10,200,300};
-        char array1[] = {'J','A','V','A',' ','C','O','R','E'};
-        String array2[] = {"Happy", "New","2019", "Year"};
+    public void canSerializePrimitivesAndPrimitiveArrays() throws IllegalAccessException {
+        int array[] = {0, 10, 200, 300};
+        char array1[] = {'J', 'A', 'V', 'A', ' ', 'C', 'O', 'R', 'E'};
+        String array2[] = {"Happy", "New", "2019", "Year"};
         Person fr1 = new Person("Petya", 19, null);
         Person friends[] = {fr1};
         Person fr2 = new Person("Katya", 25, friends);
-        Person friends2[] = {fr1,fr2};
+        Person friends2[] = {fr1, fr2};
         Person fr3 = new Person("Povelitel", 29, friends2);
-        Person friends3[] = {fr1,fr2,fr3};
+        Person friends3[] = {fr1, fr2, fr3};
         Person fr4 = new Person("Vasilisa Petrovna", 78, friends3);
-        TestClass tc = new TestClass(999999999, 999.999, true,"Mefodiy", array, array1, array2, new Address("Jos", fr3));
-        TestClass tc1 = new TestClass(95, 19.19, false,"Violetta", array, array1, array2, new Address("Moscow", fr4));
+        TestClass tc = new TestClass(999999999, 999.999, true, "Mefodiy", array, array1, array2, new Address("Jos", fr3));
+        TestClass tc1 = new TestClass(95, 19.19, false, "Violetta", array, array1, array2, new Address("Moscow", fr4));
         /*String newtc = gson.toJson(tc);
         System.out.println(newtc);*/
         String toJson = JsonSerializator.serialize(tc).toString();

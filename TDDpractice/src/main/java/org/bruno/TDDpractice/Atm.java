@@ -41,12 +41,12 @@ public class Atm implements AtmListenerInterface {
         this.cards = cards;
     }
 
-    public void setCash(long cash) {
-        this.cash = cash;
-    }
-
     public long getCash() {
         return cash;
+    }
+
+    public void setCash(long cash) {
+        this.cash = cash;
     }
 
     public int getSize100() {
@@ -85,8 +85,9 @@ public class Atm implements AtmListenerInterface {
 
     public void withdraw(long cardNumber, long cash) throws IllegalAccessException, CancellationException {
         Card card = getCardByCardNumber(cardNumber);
-        if(this.getCash() < cash) throw new CancellationException("Sorry, ATM has no money.");
-        if(card.getCash() < cash) throw new CancellationException("Sorry, Insufficient funds. Cash left: " + card.getCash());
+        if (this.getCash() < cash) throw new CancellationException("Sorry, ATM has no money.");
+        if (card.getCash() < cash)
+            throw new CancellationException("Sorry, Insufficient funds. Cash left: " + card.getCash());
         boolean can = canWithdraw(cash);
         if (can) {
             card.setCash(card.getCash() - cash);
@@ -98,11 +99,11 @@ public class Atm implements AtmListenerInterface {
         return card.getCash();
     }
 
-    public AtmSnapshot makeSnapshot () {
-        return new AtmSnapshot(this, cards, cash, size100, size1000, size5000 );
+    public AtmSnapshot makeSnapshot() {
+        return new AtmSnapshot(this, cards, cash, size100, size1000, size5000);
     }
 
-    public void restoreFromSnapshot () {
+    public void restoreFromSnapshot() {
         atmSnapshot.restore();
     }
 
@@ -114,9 +115,9 @@ public class Atm implements AtmListenerInterface {
         long left = cash;
         long minus5000 = 0;
         long minus1000 = 0;
-        if(i5000 > 0) {
+        if (i5000 > 0) {
             minus5000 = cash / 5000;
-            if(minus5000 > i5000) {
+            if (minus5000 > i5000) {
                 int dif = (int) (minus5000 - i5000);
                 left = (cash % 5000) + dif * 5_000;
                 minus5000 = minus5000 - dif;
@@ -126,7 +127,7 @@ public class Atm implements AtmListenerInterface {
         }
         if (i1000 > 0) {
             minus1000 = left / 1000;
-            if(minus1000 > i1000) {
+            if (minus1000 > i1000) {
                 int dif = (int) (minus1000 - i1000);
                 left = (left % 1000) + dif * 1_000;
                 minus1000 = minus1000 - dif;
@@ -175,7 +176,7 @@ public class Atm implements AtmListenerInterface {
             this.size5000 = size5000;
         }
 
-        public void restore () {
+        public void restore() {
             atm.setSize100(size100);
             atm.setSize1000(size1000);
             atm.setSize5000(size5000);

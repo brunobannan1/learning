@@ -26,11 +26,11 @@ public class ReflectionHelper {
         return null;
     }
 
-    static ArrayList<Method> getAllAnnotations (Class type, Class annotationClass) {
+    static ArrayList<Method> getAllAnnotations(Class type, Class annotationClass) {
         ArrayList<Method> list = new ArrayList<>();
         for (Method method : type.getDeclaredMethods()) {
             for (Annotation annotation : method.getDeclaredAnnotations()) {
-                if(annotation.annotationType() == annotationClass) {
+                if (annotation.annotationType() == annotationClass) {
                     list.add(method);
                 }
             }

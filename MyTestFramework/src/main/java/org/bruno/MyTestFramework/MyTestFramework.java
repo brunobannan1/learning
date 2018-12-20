@@ -9,14 +9,14 @@ public class MyTestFramework {
         Object[] args = {};
         Method before = null;
         Method after = null;
-        if(!ReflectionHelper.getAllAnnotations(clazz, org.bruno.MyTestFramework.annotations.Before.class).isEmpty()) {
+        if (!ReflectionHelper.getAllAnnotations(clazz, org.bruno.MyTestFramework.annotations.Before.class).isEmpty()) {
             before = ReflectionHelper.getAllAnnotations(clazz, org.bruno.MyTestFramework.annotations.Before.class).get(0);
         }
-        if(!ReflectionHelper.getAllAnnotations(clazz, org.bruno.MyTestFramework.annotations.After.class).isEmpty()) {
+        if (!ReflectionHelper.getAllAnnotations(clazz, org.bruno.MyTestFramework.annotations.After.class).isEmpty()) {
             after = ReflectionHelper.getAllAnnotations(clazz, org.bruno.MyTestFramework.annotations.After.class).get(0);
         }
         ArrayList<Method> methods = ReflectionHelper.getAllAnnotations(clazz, org.bruno.MyTestFramework.annotations.Test.class);
-        for(Method method : methods) {
+        for (Method method : methods) {
             Object o = ReflectionHelper.instantiate(clazz, args);
             if (before != null && after != null) {
                 ReflectionHelper.invokeMethod(o, before.getName(), args);

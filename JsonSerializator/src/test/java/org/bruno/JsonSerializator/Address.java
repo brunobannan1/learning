@@ -2,9 +2,15 @@ package org.bruno.JsonSerializator;
 
 import java.util.Objects;
 
-public class Address{
+public class Address {
 
     private String city;
+    private Person person;
+
+    public Address(String city, Person person) {
+        this.city = city;
+        this.person = person;
+    }
 
     public String getCity() {
         return city;
@@ -12,13 +18,6 @@ public class Address{
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    private Person person;
-
-    public Address(String city, Person person) {
-        this.city = city;
-        this.person = person;
     }
 
     @Override

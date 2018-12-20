@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.concurrent.CancellationException;
 
 public class TestAtm {
-    Atm atm,atm2;
+    Atm atm, atm2;
     Card card1;
     Card card2;
     Card card3;
@@ -20,8 +20,8 @@ public class TestAtm {
         this.card2 = new Card("Petya", 2222_2222_2222_2222L, 10001);
         this.card3 = new Card("Mongol", 3333_3333_3333_3333L, 100_000);
         // 700_000 RUB
-        this.atm = new Atm(new ArrayList<>(Arrays.asList(card1,card2,card3)), 1000, 100, 100);
-        this.atm2 = new Atm(new ArrayList<>(Arrays.asList(card1,card2,card3)), 1000, 1, 1);
+        this.atm = new Atm(new ArrayList<>(Arrays.asList(card1, card2, card3)), 1000, 100, 100);
+        this.atm2 = new Atm(new ArrayList<>(Arrays.asList(card1, card2, card3)), 1000, 1, 1);
     }
 
     @Test
@@ -30,7 +30,7 @@ public class TestAtm {
         int bef1000 = atm.getSize1000();
         int bef5000 = atm.getSize5000();
         // 25_000 RUB
-        atm.deposit(1111_1111_1111_1111L,100,10,1);
+        atm.deposit(1111_1111_1111_1111L, 100, 10, 1);
         Assert.assertTrue(atm.getSize100() == bef100 + 100);
         Assert.assertTrue(atm.getSize1000() == bef1000 + 10);
         Assert.assertTrue(atm.getSize5000() == bef5000 + 1);
@@ -39,7 +39,7 @@ public class TestAtm {
 
     @Test
     public void cardCashChangedAfterDeposit() throws IllegalAccessException {
-        atm.deposit(2222_2222_2222_2222L,10,10,5);
+        atm.deposit(2222_2222_2222_2222L, 10, 10, 5);
         Assert.assertTrue(card2.getCash() == 46_001L);
     }
 
@@ -47,7 +47,7 @@ public class TestAtm {
     public void canDepositInDifferentNominal() throws IllegalAccessException {
         long beforeAtmCash = atm.getCash();
         long cardCash = card1.getCash();
-        atm.deposit(1111_1111_1111_1111L,1,1,1);
+        atm.deposit(1111_1111_1111_1111L, 1, 1, 1);
         long afterAtmCash = atm.getCash();
         Assert.assertTrue(beforeAtmCash + 6100L == afterAtmCash);
         Assert.assertTrue(card1.getCash() == cardCash + 6100L);

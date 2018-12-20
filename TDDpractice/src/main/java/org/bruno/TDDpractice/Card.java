@@ -1,10 +1,16 @@
 package org.bruno.TDDpractice;
 
 public class Card {
+    public long cardNumber;
     private String cardholder;
     private long cash;
-    public long cardNumber;
 
+
+    public Card(String cardholder, long cardNumber, long cash) {
+        this.cardholder = cardholder;
+        this.cardNumber = cardNumber;
+        this.cash = cash;
+    }
 
     public String getCardholder() {
         return cardholder;
@@ -27,12 +33,6 @@ public class Card {
     }
 
     public void setCash(long cash) {
-        this.cash = cash;
-    }
-
-    public Card(String cardholder, long cardNumber, long cash) {
-        this.cardholder = cardholder;
-        this.cardNumber = cardNumber;
         this.cash = cash;
     }
 

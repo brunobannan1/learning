@@ -11,7 +11,7 @@ import java.util.Random;
 public class TestObservable {
 
     AtmDepartment atmDepartment;
-    Atm atm1,atm2;
+    Atm atm1, atm2;
     Card card;
     Random rnd;
     int totalCount = 25;
@@ -33,20 +33,20 @@ public class TestObservable {
         while (testCount > 0) {
             System.out.println("Test # " + (totalCount - testCount + 1) + " started");
             boolean state = rnd.nextBoolean();
-            if(state) {
+            if (state) {
                 System.out.println("ATM 1 state before: " + atm1.toString());
                 long beforeAtm1 = atm1.getCash();
                 atm1.getSize100();
                 atm1.getSize1000();
                 atm1.getSize1000();
-                int random = (rnd.nextInt(99)+1) * 1_000;
+                int random = (rnd.nextInt(99) + 1) * 1_000;
                 atm1.withdraw(1111, random);
                 System.out.println("Random value was: " + random);
                 System.out.println("ATM 1 state was changed to: " + atm1.toString());
                 Assert.assertTrue(atm1.getCash() == beforeAtm1 - random);
                 atmDepartment.notificate();
                 Assert.assertTrue(atm1.getCash() == beforeAtm1);
-                atm1.deposit(1111,random / 100,0,0);
+                atm1.deposit(1111, random / 100, 0, 0);
                 atmDepartment.notificate();
             }
             testCount--;
