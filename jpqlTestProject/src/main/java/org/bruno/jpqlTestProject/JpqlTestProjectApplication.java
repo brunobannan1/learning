@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 @SpringBootApplication
 public class JpqlTestProjectApplication {
@@ -23,6 +24,8 @@ public class JpqlTestProjectApplication {
         repository.save(new Book("War of Worlds", herbert, LocalDate.of(1981,12,20)));
         repository.save(new Book("Time machine", herbert, LocalDate.of(1957,1,1)));
         Book timeMachine = repository.findByName("Time machine").get(0);
+        Iterable<Author> authors = authorRepository.findAll();
+        authors.forEach(author -> System.out.println(author));
         System.out.println(timeMachine);
     }
 }
