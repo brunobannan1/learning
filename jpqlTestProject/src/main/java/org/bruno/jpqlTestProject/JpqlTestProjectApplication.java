@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 @SpringBootApplication
 public class JpqlTestProjectApplication {
@@ -29,5 +28,7 @@ public class JpqlTestProjectApplication {
         authors.forEach(author -> System.out.println(author));
         Iterable<Book> books = repository.findAll();
         books.forEach(book -> System.out.println(book));
+        int listCount = repository.findCountOfBooksByAuthorName(herbert.getName());
+        System.out.println(listCount);
     }
 }

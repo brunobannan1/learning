@@ -2,5 +2,5 @@ package org.bruno.jpqlTestProject;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface AuthorRepository extends CrudRepository <Author, Long> {
+public interface AuthorRepository extends CrudRepository<Author, Long> {
 }
