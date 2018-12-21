@@ -141,9 +141,9 @@ public class TestORM {
         int start = myORM.getLastPrimaryKey(Person.class);
         Random rndm = new Random();
         for (int i = start; i < 50 + start; i++) {
-            String generatedString = "generated string number: "+i;
+            String generatedString = "generated string number: " + i;
             int rnd = rndm.nextInt(100);
-            Person person = new Person(i + 2, generatedString, rnd, rnd+rndm.nextInt(), false, generatedString);
+            Person person = new Person(i + 2, generatedString, rnd, rnd + rndm.nextInt(), false, generatedString);
             dbServiceCached.save(person);
         }
         for (int i = start; i < 50 + start; i++) {
@@ -151,9 +151,9 @@ public class TestORM {
         }
 
         for (int i = 2; i < 100 + start; i++) {
-            String generatedString = "generated string number: "+i;
+            String generatedString = "generated string number: " + i;
             int rnd = rndm.nextInt(10);
-            Person person = new Person(i + 2, generatedString, rnd, rnd+rndm.nextInt(), false, generatedString);
+            Person person = new Person(i + 2, generatedString, rnd, rnd + rndm.nextInt(), false, generatedString);
             dbServiceCached.save(person);
         }
     }

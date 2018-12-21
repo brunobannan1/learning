@@ -38,11 +38,12 @@ public class CachedMyOrmDBServiceImpl implements DBService {
                 System.out.println("----------Updating object----------");
                 System.out.println("| before " + o + " |");
                 System.out.println("| now " + object + " |");
+                // SHOULD IMPLEMENT UPDATE QUERY =(
+                //service.update(object);
             }
         }
         cache.put(new Item(key, object));
-        // SHOULD IMPLEMENT UPDATE QUERY =(
-        /*service.save(object);*/
+        service.save(object);
     }
 
     @Override
