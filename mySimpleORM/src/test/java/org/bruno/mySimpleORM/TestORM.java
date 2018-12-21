@@ -1,8 +1,10 @@
 package org.bruno.mySimpleORM;
 
+import org.bruno.mySimpleORM.core.MyORM;
 import org.bruno.mySimpleORM.entities.*;
 import org.bruno.mySimpleORM.executors.Executor;
 import org.bruno.mySimpleORM.interfaces.DBService;
+import org.bruno.mySimpleORM.services.CachedMyOrmDBServiceImpl;
 import org.bruno.mySimpleORM.services.HibernateDBServiceImpl;
 import org.bruno.mySimpleORM.services.MyOrmDBServiceImpl;
 import org.bruno.mySimpleORM.utility.ConnectionInitializator;
@@ -18,6 +20,7 @@ import java.util.Random;
 
 public class TestORM {
     Connection connection = ConnectionInitializator.getConnection();
+    DBService dbServiceCached = new CachedMyOrmDBServiceImpl(connection);
     DBService dbService = new MyOrmDBServiceImpl(connection);
     DBService hibService = new HibernateDBServiceImpl();
 
@@ -74,12 +77,8 @@ public class TestORM {
 
     @Test
     public void canRestoreObjectFromDB() {
-        Connection connection = ConnectionInitializator.getConnection();
-        Executor executor = new Executor(connection);
-        int id = executor.executeQuery("select id from public.\"Person\" ORDER by id DESC LIMIT 1", resultSet -> {
-            resultSet.next();
-            return resultSet.getInt(1);
-        });
+        MyORM myORM = new MyORM(connection);
+        int id = myORM.getLastPrimaryKey(Person.class);
         String condition = "where id = \'" + (id + 1) + "\'";
 
         String lastMarks = "A,A,A,B,A,A,A,A,A,B,A";
@@ -132,4 +131,30 @@ public class TestORM {
         hibService.shutdown();
     }
 
+    @Test
+    public void cacheServiceTest() {
+        /*Connection connection = ConnectionInitializator.getConnection();
+        Executor executor = new Executor(connection);
+        String del = "delete from public.\"Person\"";
+        executor.executeUpdate(del);*/
+        MyORM myORM = new MyORM(connection);
+        int start = myORM.getLastPrimaryKey(Person.class);
+        Random rndm = new Random();
+        for (int i = start; i < 50 + start; i++) {
+            String generatedString = "generated string number: "+i;
+            int rnd = rndm.nextInt(100);
+            Person person = new Person(i + 2, generatedString, rnd, rnd+rndm.nextInt(), false, generatedString);
+            dbServiceCached.save(person);
+        }
+        for (int i = start; i < 50 + start; i++) {
+            System.out.println(dbServiceCached.read(Person.class, "where id = \'" + (i + 2) + "\'"));
+        }
+
+        for (int i = 2; i < 100 + start; i++) {
+            String generatedString = "generated string number: "+i;
+            int rnd = rndm.nextInt(10);
+            Person person = new Person(i + 2, generatedString, rnd, rnd+rndm.nextInt(), false, generatedString);
+            dbServiceCached.save(person);
+        }
+    }
 }
