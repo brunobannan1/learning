@@ -1,6 +1,9 @@
 package org.bruno.mySimpleORM.services.cache;
 
+import org.bruno.mySimpleORM.utility.Tuple;
+
 import java.lang.ref.SoftReference;
+import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Timer;
@@ -12,7 +15,7 @@ public class CacheServiceImpl<K, V> implements CacheService<K, V> {
     private static final int TIME_THRESHOLD_MS = 10;
 
     private static final int DEFAULT_SIZE = 100;
-    private final Map<K, SoftReference<Item<K, V>>> items = new LinkedHashMap<>();
+    private final Map<K, SoftReference<Item<K, V>>> items;
     private final Timer timer = new Timer();
     private final int cacheSize;
     private final long lifeTimeMs;
@@ -26,6 +29,7 @@ public class CacheServiceImpl<K, V> implements CacheService<K, V> {
         this.cacheSize = cacheSize;
         this.lifeTimeMs = lifeTimeMs;
         this.idleTimeMs = idleTimeMs;
+        this.items = new LinkedHashMap<>(cacheSize);
         this.isEternal = lifeTimeMs == 0 && idleTimeMs == 0 || isEternal;
     }
 
@@ -34,34 +38,48 @@ public class CacheServiceImpl<K, V> implements CacheService<K, V> {
         this.lifeTimeMs = 0;
         this.idleTimeMs = 0;
         this.isEternal = true;
+        this.items = new LinkedHashMap<>(DEFAULT_SIZE);
     }
 
     @Override
     public Item<K, V> get(K key) {
-        Item<K, V> item = items.get(key).get();
-        if (item == null) {
-            missCount++;
-        } else {
+        SoftReference<Item<K, V>> softReference = items.get(key);
+        if (softReference != null) {
             hitCount++;
+            Item<K, V> item = softReference.get();
             item.setLastAccessTime();
+            return item;
+        } else {
+            missCount++;
+            return null;
         }
-        return item;
     }
 
     @Override
     public void put(Item<K, V> item) {
+
+        if (cacheSize == items.size()) {
+            K firstKey = items.keySet().iterator().next();
+            items.remove(firstKey);
+        }
+
         SoftReference<Item<K, V>> softReference = new SoftReference<>(item);
         K key = item.getKey();
         items.put(key, softReference);
 
         if (lifeTimeMs != 0) {
-            TimerTask lifeTimerTask = getTimerTask(key, lifeElement -> lifeElement.getCreationTime() + lifeTimeMs);
+            TimerTask lifeTimerTask = getTimerTask(key, lifeItem -> lifeItem.getCreationTime() + lifeTimeMs);
             timer.schedule(lifeTimerTask, lifeTimeMs);
         }
         if (idleTimeMs != 0) {
-            TimerTask idleTimerTask = getTimerTask(key, idleElement -> idleElement.getLastAccessTime() + idleTimeMs);
+            TimerTask idleTimerTask = getTimerTask(key, idleItem -> idleItem.getLastAccessTime() + idleTimeMs);
             timer.schedule(idleTimerTask, idleTimeMs, idleTimeMs);
         }
+    }
+
+    @Override
+    public Map<K, SoftReference<Item<K, V>>> getItems() {
+        return items;
     }
 
     @Override
@@ -114,5 +132,24 @@ public class CacheServiceImpl<K, V> implements CacheService<K, V> {
 
     private boolean isT1BeforeT2(long t1, long t2) {
         return t1 < t2 + TIME_THRESHOLD_MS;
+    }
+
+    @Override
+    public Tuple<Class, Number> getKeyForSave(Object object) {
+        try {
+            Class clazz = object.getClass();
+            Field field = clazz.getDeclaredField("id");
+            field.setAccessible(true);
+            Number id = (Number) field.get(object);
+            Tuple<Class, Number> key = new Tuple<>(clazz, id);
+            return key;
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Tuple<Class, Number> getKeyForLoad(Class clazz, String condition) {
+        return new Tuple<>(clazz, Long.valueOf(condition.replaceAll("\\D+", "")));
     }
 }

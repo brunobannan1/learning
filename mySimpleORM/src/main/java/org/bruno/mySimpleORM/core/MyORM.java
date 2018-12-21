@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +29,16 @@ public final class MyORM {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public int getLastPrimaryKey(Class clazz) {
+        Executor executor = new Executor(connection);
+        String tableName = "public.\"" + clazz.getName().substring(clazz.getName().lastIndexOf('.') + 1) + "\"";
+        int id = executor.executeQuery("select id from " + tableName + " ORDER by id DESC LIMIT 1", resultSet -> {
+            resultSet.next();
+            return resultSet.getInt(1);
+        });
+        return id;
     }
 
     private String generateUpdateString(Map<Field, Object> map, Object o) {
@@ -91,18 +102,23 @@ public final class MyORM {
             resultSet.next();
             return resultSet.getInt(1);
         });
-        int[] id = new int[count];
-        executor.executeQuery("select id from " + tableName, resultSet -> {
-            for (int i = 0; i < count; i++) {
-                resultSet.next();
-                id[i] = resultSet.getInt(1);
+        if (count > 0) {
+            int[] id = new int[count];
+            executor.executeQuery("select id from " + tableName, resultSet -> {
+                for (int i = 0; i < count; i++) {
+                    resultSet.next();
+                    id[i] = resultSet.getInt(1);
+                }
+                return id;
+            });
+
+            int startid = Arrays.stream(id).min().getAsInt();
+            for (int i : id) {
+                objects.add(read(o, " where id = \'" + id[i - startid] + "\'"));
+                if (i - startid >= id.length - 1) break;
             }
-            return id;
-        });
-        for (int i : id) {
-            objects.add(read(o, " where id = \'" + id[i] + "\'"));
-            if (i >= id.length - 1) break;
-        }
-        return objects;
+            return objects;
+        } else
+            return new ArrayList<>();
     }
 }

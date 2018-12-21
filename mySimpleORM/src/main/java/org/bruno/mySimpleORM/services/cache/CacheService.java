@@ -1,5 +1,10 @@
 package org.bruno.mySimpleORM.services.cache;
 
+import org.bruno.mySimpleORM.utility.Tuple;
+
+import java.lang.ref.SoftReference;
+import java.util.Map;
+
 public interface CacheService<K, V> {
 
     Item<K, V> get(K key);
@@ -20,4 +25,9 @@ public interface CacheService<K, V> {
 
     void setIdleTime(long idleTimeMs);
 
+    Tuple<Class, Number> getKeyForSave(K object);
+
+    Tuple<Class, Number> getKeyForLoad(Class clazz, String condition);
+
+    public Map<K, SoftReference<Item<K, V>>> getItems();
 }

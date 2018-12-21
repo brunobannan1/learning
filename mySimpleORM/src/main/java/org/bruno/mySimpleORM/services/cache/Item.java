@@ -6,7 +6,7 @@ public class Item<K, V> {
     private final long creationTime;
     private long lastAccessTime;
 
-    public Item(K key, V value, long creationTime, long lastAccessTime) {
+    public Item(K key, V value) {
         this.key = key;
         this.value = value;
         this.creationTime = getCurrentTime();
