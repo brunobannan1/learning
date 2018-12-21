@@ -1,1 +1,40 @@
-language: java
+---
+matrix:
+  include:
+    -
+      before_script:
+        - "cd JsonSerializator"
+      jdk: oraclejdk11
+      language: java
+      script: "mvn clean package"
+    -
+    before_script:
+        - "cd L1"
+      jdk: oraclejdk11
+      language: java
+      script: "mvn clean package"
+    -
+    before_script:
+        - "cd L2"
+      jdk: oraclejdk11
+      language: java
+      script: "mvn clean package"
+    -
+    before_script:
+        - "cd L3"
+      jdk: oraclejdk11
+      language: java
+      script: "mvn clean package"
+    -
+    before_script:
+        - "cd L1"
+      jdk: oraclejdk11
+      language: java
+      script: "mvn clean package"
+    -
+   before_script:
+        - "cd MyTestFramework"
+      jdk: oraclejdk11
+      language: java
+      script: "mvn clean package"
+    -
