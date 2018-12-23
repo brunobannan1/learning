@@ -1,7 +1,6 @@
 package org.bruno.mySimpleORM.services;
 
 import org.bruno.mySimpleORM.interfaces.DBService;
-import org.bruno.mySimpleORM.services.cache.CacheService;
 import org.bruno.mySimpleORM.services.cache.CacheServiceImpl;
 import org.bruno.mySimpleORM.services.cache.Item;
 import org.bruno.mySimpleORM.utility.Tuple;
@@ -14,7 +13,7 @@ public class CachedMyOrmDBServiceImpl implements DBService {
     private Connection connection;
 
     private MyOrmDBServiceImpl service;
-    private CacheService cache = new CacheServiceImpl(100, 0, 0, true);
+    private CacheServiceImpl cache = new CacheServiceImpl(25, 0, 0, true);
 
     public CachedMyOrmDBServiceImpl(Connection connection) {
         this.connection = connection;
@@ -43,6 +42,7 @@ public class CachedMyOrmDBServiceImpl implements DBService {
             }
         }
         cache.put(new Item(key, object));
+        System.out.println("| object " + object + " is (adding / updating) to DB|");
         service.save(object);
     }
 
@@ -58,6 +58,10 @@ public class CachedMyOrmDBServiceImpl implements DBService {
             }
         }
         return service.read(clazz, condition);
+    }
+
+    public CacheServiceImpl getCache() {
+        return cache;
     }
 
     @Override

@@ -35,7 +35,10 @@ public final class MyORM {
         Executor executor = new Executor(connection);
         String tableName = "public.\"" + clazz.getName().substring(clazz.getName().lastIndexOf('.') + 1) + "\"";
         int id = executor.executeQuery("select id from " + tableName + " ORDER by id DESC LIMIT 1", resultSet -> {
-            resultSet.next();
+            if (!resultSet.isBeforeFirst()) {
+                return -1;
+            } else
+                resultSet.next();
             return resultSet.getInt(1);
         });
         return id;
