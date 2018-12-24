@@ -6,13 +6,17 @@ import org.bruno.mySimpleORM.services.CachedMyOrmDBServiceImpl;
 import org.bruno.mySimpleORM.services.cache.CacheServiceImpl;
 import org.bruno.mySimpleORM.utility.ConnectionInitializator;
 import org.bruno.mySimpleORM.webserver.servlets.CacheInfoServlet;
+import org.bruno.mySimpleORM.webserver.servlets.Filter;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import javax.servlet.DispatcherType;
 import java.sql.Connection;
+import java.util.EnumSet;
 import java.util.Random;
 
 public class Application {
@@ -40,6 +44,7 @@ public class Application {
     private static void setServletContextHandler() {
         context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.addServlet(new ServletHolder(new CacheInfoServlet(service)), "/cache");
+        context.addFilter(new FilterHolder(new Filter()),"private/*", EnumSet.of(DispatcherType.INCLUDE, DispatcherType.REQUEST));
     }
 
     private final static void initializeServer() {
