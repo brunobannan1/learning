@@ -107,6 +107,18 @@ public class CacheServiceImpl<K, V> implements CacheService<K, V> {
         throw new RuntimeException("Shouldn't use this method for this implementation");
     }
 
+    public long getLifeTimeMs() {
+        return lifeTimeMs;
+    }
+
+    public long getIdleTimeMs() {
+        return idleTimeMs;
+    }
+
+    public boolean isEternal() {
+        return isEternal;
+    }
+
     @Override
     public void setLifeTime(long lifeTimeMs) {
         throw new RuntimeException("Shouldn't use this method for this implementation");

@@ -8,6 +8,7 @@ import org.bruno.mySimpleORM.services.CachedMyOrmDBServiceImpl;
 import org.bruno.mySimpleORM.services.HibernateDBServiceImpl;
 import org.bruno.mySimpleORM.services.MyOrmDBServiceImpl;
 import org.bruno.mySimpleORM.utility.ConnectionInitializator;
+import org.bruno.mySimpleORM.webserver.Application;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -132,29 +133,7 @@ public class TestORM {
     }
 
     @Test
-    public void cacheServiceTest() {
-        /*Connection connection = ConnectionInitializator.getConnection();
-        Executor executor = new Executor(connection);
-        String del = "delete from public.\"Person\"";
-        executor.executeUpdate(del);*/
-        MyORM myORM = new MyORM(connection);
-        int start = myORM.getLastPrimaryKey(Person.class);
-        Random rndm = new Random();
-        for (int i = start; i < 50 + start; i++) {
-            String generatedString = "generated string number: " + i;
-            int rnd = rndm.nextInt(100);
-            Person person = new Person(i + 2, generatedString, rnd, rnd + rndm.nextInt(), false, generatedString);
-            dbServiceCached.save(person);
-        }
-        for (int i = start; i < 50 + start; i++) {
-            System.out.println(dbServiceCached.read(Person.class, "where id = \'" + (i + 2) + "\'"));
-        }
-
-        for (int i = 2; i < 100 + start; i++) {
-            String generatedString = "generated string number: " + i;
-            int rnd = rndm.nextInt(10);
-            Person person = new Person(i + 2, generatedString, rnd, rnd + rndm.nextInt(), false, generatedString);
-            dbServiceCached.save(person);
-        }
+    public void cacheServiceTest() throws Exception {
+        Application.testMethod();
     }
 }
