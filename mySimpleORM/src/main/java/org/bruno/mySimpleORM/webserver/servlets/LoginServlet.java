@@ -18,9 +18,6 @@ public class LoginServlet extends HttpServlet {
     private String login;
     private String password;
 
-    public LoginServlet() {
-    }
-
     private static String getPage(String login, String password) throws IOException {
         Map<String, Object> pageVariables = new HashMap<>();
         pageVariables.put(LOGIN_PARAM, login == null ? "" : login);
@@ -30,7 +27,11 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doPost(req, resp);
+        String l = req.getParameter(LOGIN_PARAM) == null ? "" : req.getParameter(LOGIN_PARAM);
+        String p = req.getParameter(PASSWORD_PARAM) == null ? "" : req.getParameter(PASSWORD_PARAM);
+        String page = getPage(l, p);
+        resp.getWriter().println(page);
+        //doPost(req, resp);
     }
 
     @Override
@@ -44,10 +45,9 @@ public class LoginServlet extends HttpServlet {
             req.getServletContext().setAttribute(PASSWORD_PARAM, password);
             resp.addCookie(new Cookie(LOGIN_PARAM, login));
             resp.addCookie(new Cookie(PASSWORD_PARAM, password));
-            String page = getPage(login, password);
-            resp.getWriter().println(page);
             setOK(resp);
         }
+        resp.sendRedirect("/private/cache");
     }
 
     private void setOK(HttpServletResponse response) {

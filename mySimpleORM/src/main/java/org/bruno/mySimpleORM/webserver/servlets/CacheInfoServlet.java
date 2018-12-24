@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class CacheInfoServlet extends HttpServlet {
 
-    private static final String PAGE = "cacheinfo.html";
+    private static final String PAGE = "private/cacheinfo.html";
 
     private final CacheServiceImpl cacheService;
 

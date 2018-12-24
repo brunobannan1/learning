@@ -24,7 +24,6 @@ public class Filter implements javax.servlet.Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
     }
 
     @Override
@@ -32,14 +31,15 @@ public class Filter implements javax.servlet.Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
         HttpSession session = req.getSession(false);
-
-        login = (String) session.getAttribute(LOGIN_PARAM);
-        password = (String) session.getAttribute(PASSWORD_PARAM);
+        if (session.getAttributeNames() != null) {
+            login = (String) session.getAttribute(LOGIN_PARAM);
+            password = (String) session.getAttribute(PASSWORD_PARAM);
+        }
 
         Tuple<String, String> auth = new Tuple<>(login, password);
 
         if (session == null || !list.contains(auth)) {
-            resp.sendRedirect("login");
+            resp.sendRedirect("../login");
         } else {
             chain.doFilter(request, response);
         }
@@ -47,6 +47,5 @@ public class Filter implements javax.servlet.Filter {
 
     @Override
     public void destroy() {
-
     }
 }

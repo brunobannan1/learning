@@ -7,6 +7,7 @@ import org.bruno.mySimpleORM.services.cache.CacheServiceImpl;
 import org.bruno.mySimpleORM.utility.ConnectionInitializator;
 import org.bruno.mySimpleORM.webserver.servlets.CacheInfoServlet;
 import org.bruno.mySimpleORM.webserver.servlets.Filter;
+import org.bruno.mySimpleORM.webserver.servlets.LoginServlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
@@ -43,8 +44,9 @@ public class Application {
 
     private static void setServletContextHandler() {
         context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.addServlet(new ServletHolder(new CacheInfoServlet(service)), "/cache");
-        context.addFilter(new FilterHolder(new Filter()),"private/*", EnumSet.of(DispatcherType.INCLUDE, DispatcherType.REQUEST));
+        context.addServlet(LoginServlet.class, "/login");
+        context.addFilter(new FilterHolder(new Filter()), "/private/*", EnumSet.of(DispatcherType.INCLUDE, DispatcherType.REQUEST));
+        context.addServlet(new ServletHolder(new CacheInfoServlet(service)), "/private/cache");
     }
 
     private final static void initializeServer() {
@@ -88,6 +90,4 @@ public class Application {
             Thread.sleep(250);
         }
     }
-
-
 }
