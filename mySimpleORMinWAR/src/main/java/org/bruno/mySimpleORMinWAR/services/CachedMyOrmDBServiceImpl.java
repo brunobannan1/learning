@@ -13,7 +13,7 @@ public class CachedMyOrmDBServiceImpl implements DBService {
     private Connection connection;
 
     private MyOrmDBServiceImpl service;
-    private CacheServiceImpl cache = new CacheServiceImpl(25, 0, 0, true);
+    private CacheServiceImpl cache = new CacheServiceImpl(50, 0, 0, true);
 
     public CachedMyOrmDBServiceImpl(Connection connection) {
         this.connection = connection;

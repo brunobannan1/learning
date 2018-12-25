@@ -1,6 +1,7 @@
 package org.bruno.mySimpleORMinWAR.webserver.servlets;
 
 import org.bruno.mySimpleORMinWAR.services.cache.CacheServiceImpl;
+import org.bruno.mySimpleORMinWAR.webserver.Application;
 import org.bruno.mySimpleORMinWAR.webserver.TemplateProcessor;
 
 import javax.servlet.ServletException;
@@ -14,11 +15,21 @@ import java.util.Map;
 public class CacheInfoServlet extends HttpServlet {
 
     private static final String PAGE = "private/cacheinfo.html";
+    private Application application;
+    private CacheServiceImpl cacheService;
 
-    private final CacheServiceImpl cacheService;
+    public CacheInfoServlet() {
+    }
 
-    public CacheInfoServlet(CacheServiceImpl cacheService) {
-        this.cacheService = cacheService;
+    @Override
+    public void init() throws ServletException {
+        application = new Application();
+        cacheService = application.getService();
+        try {
+            application.testMethod();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

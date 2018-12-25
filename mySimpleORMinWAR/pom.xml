@@ -69,12 +69,12 @@
     </dependencies>
 
     <build>
-        <finalName>WARtest</finalName>
+        <finalName>root</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <configuration>
-                    <webXml>src/resources/WEB-INF/web.xml</webXml>
+                    <webXml>src/main/resources/WEB-INF/web.xml</webXml>
                     <webResources>
                         <resource>
                             <directory>public_html</directory>
