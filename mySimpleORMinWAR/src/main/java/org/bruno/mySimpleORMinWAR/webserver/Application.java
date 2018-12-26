@@ -17,39 +17,42 @@ public class Application {
 
     public void testMethod() throws Exception {
         new Thread(() -> {
-            MyORM myORM = new MyORM(connection);
-            int start = myORM.getLastPrimaryKey(Person.class);
-            if (start == -1) start = +2;
-            Random rndm = new Random();
-            for (int i = start; i < 50 + start; i++) {
-                String generatedString = "generated string number: " + i;
-                int rnd = rndm.nextInt(100);
-                Person person = new Person(i, generatedString, rnd, rnd + rndm.nextInt(100), false, generatedString);
-                dbServiceCached.save(person);
-                try {
-                    Thread.sleep(150);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            while (true) {
+                MyORM myORM = new MyORM(connection);
+                int start = myORM.getLastPrimaryKey(Person.class);
+                if (start == -1) start = +2;
+                Random rndm = new Random();
+                for (int i = start; i < 50 + start; i++) {
+                    String generatedString = "generated string number: " + i;
+                    int rnd = rndm.nextInt(100);
+                    Person person = new Person(i, generatedString, rnd, rnd + rndm.nextInt(100), false, generatedString);
+                    dbServiceCached.save(person);
+                    try {
+                        Thread.sleep(150);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-            for (int i = start; i < 50 + start; i++) {
-                System.out.println(dbServiceCached.read(Person.class, "where id = \'" + (i) + "\'"));
-                try {
-                    Thread.sleep(150);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                for (int i = start; i < 50 + start; i++) {
+                    System.out.println(dbServiceCached.read(Person.class, "where id = \'" + (i) + "\'"));
+                    try {
+                        Thread.sleep(150);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-            for (int i = start; i < 100 + start; i++) {
-                String generatedString = "generated string number: " + i;
-                int rnd = rndm.nextInt(10);
-                Person person = new Person(i, generatedString, rnd, rnd + rndm.nextInt(100), false, generatedString);
-                dbServiceCached.save(person);
-                try {
-                    Thread.sleep(150);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                for (int i = start; i < 100 + start; i++) {
+                    String generatedString = "generated string number: " + i;
+                    int rnd = rndm.nextInt(10);
+                    Person person = new Person(i, generatedString, rnd, rnd + rndm.nextInt(100), false, generatedString);
+                    dbServiceCached.save(person);
+                    try {
+                        Thread.sleep(150);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
+                System.out.println(Thread.currentThread().getName());
             }
         }).start();
     }
